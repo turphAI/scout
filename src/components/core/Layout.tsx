@@ -8,9 +8,13 @@ interface LayoutProps {
   children: React.ReactNode;
   variant?: 'home' | 'results' | 'landing';
   className?: string;
+  showOverlayPanel?: boolean;
+  isOverlayOpen?: boolean;
+  onOverlayClose?: () => void;
+  onSmartSuggestOpen?: () => void;
 }
 
-export default function Layout({ children, variant = 'home', className = '' }: LayoutProps) {
+export default function Layout({ children, variant = 'home', className = '', showOverlayPanel = true, isOverlayOpen, onOverlayClose, onSmartSuggestOpen }: LayoutProps) {
   const pathname = usePathname();
   
   // Map our layout variants to header variants
@@ -47,8 +51,11 @@ export default function Layout({ children, variant = 'home', className = '' }: L
           variant={headerVariant}
           onLogout={() => console.log('Logout clicked')}
           onNavSelect={(navKey) => console.log('Nav selected:', navKey)}
-          onSmartSuggestOpen={() => console.log('Smart suggest opened')}
+          onSmartSuggestOpen={onSmartSuggestOpen}
           homeHref={getFeatureHomepage()}
+          showOverlayPanel={showOverlayPanel}
+          isOverlayOpen={isOverlayOpen}
+          onOverlayClose={onOverlayClose}
         />
       )}
       <main className={`${mainPadding} ${className}`}>

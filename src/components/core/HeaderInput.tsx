@@ -8,22 +8,34 @@ import { Badge } from '@/components/ui/badge';
 interface HeaderInputProps {
   onFocus?: () => void;
   onSmartSuggestOpen?: () => void;
+  onSubmit?: (value: string) => void;
   placeholder?: string;
   className?: string;
   hideBadge?: boolean;
+  value?: string;
+  onChange?: (value: string) => void;
 }
 
 export default function HeaderInput({
   onFocus,
   onSmartSuggestOpen,
+  onSubmit,
   placeholder = "What do you want to know...",
   className = "",
-  hideBadge = false
+  hideBadge = false,
+  value,
+  onChange
 }: HeaderInputProps) {
   
   const handleFocus = () => {
     onFocus?.();
     onSmartSuggestOpen?.();
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && onSubmit) {
+      onSubmit(e.currentTarget.value);
+    }
   };
 
   return (
@@ -33,6 +45,9 @@ export default function HeaderInput({
         placeholder={placeholder}
         className={`pl-10 w-full ${hideBadge ? 'pr-3' : 'pr-20'}`}
         onFocus={handleFocus}
+        onKeyDown={handleKeyDown}
+        value={value}
+        onChange={(e) => onChange?.(e.target.value)}
       />
       {!hideBadge && (
         <div className="absolute right-2 top-1/2 -translate-y-1/2">

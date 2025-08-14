@@ -20,6 +20,9 @@ export type HeaderProps = {
   onNavSelect?: (navKey: string) => void;
   onSmartSuggestOpen?: () => void;
   homeHref?: string;
+  showOverlayPanel?: boolean;
+  isOverlayOpen?: boolean;
+  onOverlayClose?: () => void;
 };
 
 export default function Header({
@@ -28,6 +31,9 @@ export default function Header({
   onNavSelect,
   onSmartSuggestOpen,
   homeHref = '/',
+  showOverlayPanel = true,
+  isOverlayOpen,
+  onOverlayClose,
 }: HeaderProps) {
   const router = useRouter();
   const [isSmartSuggestOpen, setIsSmartSuggestOpen] = useState(false);
@@ -44,6 +50,7 @@ export default function Header({
 
   const handleSmartSuggestClose = () => {
     setIsSmartSuggestOpen(false);
+    onOverlayClose?.();
   };
 
   return (
@@ -103,12 +110,13 @@ export default function Header({
         </div>
       )}
       
-      {/* Enhanced Smart Suggest Panel */}
-      {isSmartSuggestOpen && (
+      {/* Enhanced Smart Suggest Panel - Overlay Mode */}
+      {showOverlayPanel && (isSmartSuggestOpen || !!isOverlayOpen) && (
         <EnhancedSmartSuggestPanel
-          isOpen={isSmartSuggestOpen}
+          isOpen={isSmartSuggestOpen || !!isOverlayOpen}
           onClose={handleSmartSuggestClose}
           onSmartSuggestOpen={handleSmartSuggestOpen}
+          mode="overlay"
         />
       )}
     </header>

@@ -2,11 +2,13 @@
 
 import { Card, CardContent } from "@/components/ui/card"
 import Link from "next/link"
+import PageWithSidecar from "@/components/core/PageWithSidecar"
 
 export function SearchToSuggestionsDemo() {
   return (
-    <div className="min-h-screen bg-background p-8">
-      <div className="max-w-4xl mx-auto">
+    <PageWithSidecar showSidecar={false} sidecarMode="overlay">
+      <div className="min-h-screen bg-background p-8">
+        <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold mb-4">Scout 1 Prototype</h1>
@@ -40,5 +42,6 @@ export function SearchToSuggestionsDemo() {
         </Card>
       </div>
     </div>
+    </PageWithSidecar>
   )
 }

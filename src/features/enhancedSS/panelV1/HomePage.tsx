@@ -1,15 +1,65 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Layout from '@/components/core/Layout';
+import PageWithSidecar from '@/components/core/PageWithSidecar';
+import EnhancedSmartSuggestPanel from '@/components/core/EnhancedSmartSuggestPanel';
 
 export default function HomePage() {
+  const [isOverlayOpen, setIsOverlayOpen] = useState(false);
+  const [isSidecarOpen, setIsSidecarOpen] = useState(false);
+  const [panelMode, setPanelMode] = useState<'overlay' | 'sidecar'>('overlay');
+
+  const handleOverlayClose = () => {
+    setIsOverlayOpen(false);
+    setIsSidecarOpen(false);
+    setPanelMode('overlay');
+  };
+
+  const handleSidecarOpen = () => {
+    setIsOverlayOpen(true);
+    setPanelMode('overlay');
+  };
+
+  const handleSidecarClose = () => {
+    setIsSidecarOpen(false);
+    setIsOverlayOpen(false);
+    setPanelMode('overlay');
+  };
+
+  const handlePanelModeChange = (mode: 'overlay' | 'sidecar') => {
+    setPanelMode(mode);
+    if (mode === 'sidecar') {
+      setIsOverlayOpen(false);
+      setIsSidecarOpen(true);
+    } else {
+      setIsOverlayOpen(true);
+      setIsSidecarOpen(false);
+    }
+  };
+
   return (
-    <Layout variant="home">
-      <main 
-        className="w-full flex-1 min-h-screen flex flex-col items-center justify-start"
-        style={{ background: '#f9f7f5' }}
-      >
+    <div className="min-h-screen w-screen flex" style={{ width: '100vw', background: '#f9f7f5' }}>
+      <div className="flex-1">
+        <Layout 
+          variant="home" 
+          showOverlayPanel={false}
+          isOverlayOpen={isOverlayOpen}
+          onOverlayClose={handleOverlayClose}
+          onSmartSuggestOpen={handleSidecarOpen}
+          className="w-full"
+        >
+          <PageWithSidecar 
+            showSidecar={isSidecarOpen} 
+            sidecarMode={panelMode}
+            onSidecarClose={handleSidecarClose}
+            onPanelModeChange={handlePanelModeChange}
+            isOverlayOpen={isOverlayOpen}
+          >
+            <main 
+              className="w-full flex flex-col items-center justify-start"
+              style={{ background: '#f9f7f5' }}
+            >
         {/* Hero Section */}
         <section 
           className="w-full max-w-5xl bg-white rounded-xl shadow flex flex-col md:flex-row gap-8 mt-8 relative overflow-hidden"
@@ -139,7 +189,22 @@ export default function HomePage() {
             </div>
           </div>
         </section>
-      </main>
-    </Layout>
+            </main>
+          </PageWithSidecar>
+        </Layout>
+      </div>
+      
+      {/* True sidecar - positioned outside Layout for full viewport height */}
+      {isSidecarOpen && (
+        <div className="w-96 h-screen border-l border-gray-200 bg-white">
+          <EnhancedSmartSuggestPanel
+            isOpen={isSidecarOpen}
+            onClose={handleSidecarClose}
+            mode="sidecar"
+            onModeChange={handlePanelModeChange}
+          />
+        </div>
+      )}
+    </div>
   );
 }
