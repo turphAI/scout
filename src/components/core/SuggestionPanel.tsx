@@ -1,6 +1,5 @@
 "use client"
 
-import { useState } from "react"
 import { ChevronRight, MessageSquare, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -25,10 +24,7 @@ export function SuggestionPanel({
   onSuggestionClick,
   onEnterConversation
 }: SuggestionPanelProps) {
-  const [selectedSuggestion, setSelectedSuggestion] = useState<string | null>(null)
-
   const handleSuggestionClick = (suggestion: Suggestion) => {
-    setSelectedSuggestion(suggestion.id)
     onSuggestionClick(suggestion)
   }
 

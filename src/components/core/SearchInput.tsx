@@ -21,7 +21,7 @@ export function SearchInput({
   onExpand
 }: SearchInputProps) {
   const [query, setQuery] = useState("")
-  const [isFocused, setIsFocused] = useState(false)
+
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -48,8 +48,7 @@ export function SearchInput({
             placeholder="Search or ask a question..."
             value={query}
             onChange={(e) => handleInputChange(e.target.value)}
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}
+
             className="pl-10 pr-12 h-12 text-lg"
           />
           <Button

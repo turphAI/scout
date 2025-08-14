@@ -31,7 +31,7 @@ export function TransitionManager({ suggestions }: TransitionManagerProps) {
     // For now, we'll just log the query
   }, [])
 
-  const handleSuggestionClick = useCallback((suggestion: any) => {
+  const handleSuggestionClick = useCallback((suggestion: { text: string; type?: string }) => {
     console.log("Suggestion clicked:", suggestion)
     
     if (suggestion.type === "conversational") {

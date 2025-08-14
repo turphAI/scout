@@ -1,7 +1,6 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 
@@ -27,7 +26,6 @@ const prototypePhases = [
 ]
 
 export function PrototypeNavigation() {
-  const pathname = usePathname()
 
   return (
     <Card className="mb-8">

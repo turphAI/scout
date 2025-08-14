@@ -8,9 +8,7 @@ import HeaderInput from './HeaderInput';
 import EnhancedSmartSuggestPanel from './EnhancedSmartSuggestPanel';
 import {
   NavigationMenu,
-  NavigationMenuContent,
   NavigationMenuItem,
-  NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
 } from '@/components/ui/navigation-menu';

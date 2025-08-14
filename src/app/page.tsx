@@ -1,4 +1,3 @@
-import Link from "next/link"
 import { SearchToSuggestionsDemo } from "@/features/search-to-suggestions/SearchToSuggestionsDemo"
 
 export default function Home() {

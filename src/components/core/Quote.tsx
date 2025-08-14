@@ -10,7 +10,7 @@ interface QuoteProps {
 }
 
 // Function to get company logo/initials
-const getCompanyLogo = (ticker: string, companyName: string) => {
+const getCompanyLogo = (ticker: string) => {
   const logoMap: { [key: string]: string } = {
     'IONQ': 'IQ',
     'RGTI': 'RC',
@@ -28,7 +28,7 @@ export default function Quote({ ticker, companyName, percentageChange, sharePric
       {/* Left section - company logo circle */}
       <div className="w-8 h-8 bg-gray-300 rounded-full flex-shrink-0 flex items-center justify-center">
         <span className="text-xs font-semibold text-gray-700">
-          {getCompanyLogo(ticker, companyName)}
+          {getCompanyLogo(ticker)}
         </span>
       </div>
       
