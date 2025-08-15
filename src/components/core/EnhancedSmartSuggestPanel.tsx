@@ -68,9 +68,16 @@ export default function EnhancedSmartSuggestPanel({
   // Handle input submission
   const handleInputSubmit = (value: string) => {
     const trimmedValue = value.trim().toLowerCase();
+    
+    // Clear input for all searches
+    setInputValue('');
+    
     if (trimmedValue === 'aapl') {
       setShowStockResponse(true);
-      setInputValue(value);
+    } else {
+      // Handle other searches
+      console.log('Search submitted:', value);
+      // You can add additional logic here for handling other searches
     }
   };
 
