@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { X, Sparkles, AudioLines, PanelRight, PanelTop } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -9,7 +9,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import HeaderInput from './HeaderInput';
+import EnhancedInput from './EnhancedInput';
 import Quote from './Quote';
 import ConversationalButtonWithIcon from './ConversationalButton';
 import StockResponse from './StockResponse';
@@ -41,6 +41,26 @@ export default function EnhancedSmartSuggestPanel({
   const [showStockResponse, setShowStockResponse] = useState(false);
   const [inputValue, setInputValue] = useState('');
   
+  // Ref for the panel element
+  const panelRef = useRef<HTMLDivElement>(null);
+  
+  // Handle click outside to close overlay
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (mode === 'overlay' && panelRef.current && !panelRef.current.contains(event.target as Node)) {
+        onClose();
+      }
+    };
+
+    if (isOpen && mode === 'overlay') {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen, mode, onClose]);
+  
   if (!isOpen) {
     return null;
   }
@@ -62,6 +82,7 @@ export default function EnhancedSmartSuggestPanel({
 
   return (
     <div 
+      ref={panelRef}
       className={`${
         mode === 'overlay' 
           ? `fixed z-50 mx-1 bg-white rounded-2xl ${
@@ -69,7 +90,7 @@ export default function EnhancedSmartSuggestPanel({
                 ? 'top-0 right-0 bottom-0 w-96' 
                 : 'top-12 left-0 right-0'
             }`
-          : `w-full h-full ${
+          : `w-full h-full bg-white ${
               isRightPanel 
                 ? 'lg:w-96' 
                 : 'w-full'
@@ -77,8 +98,8 @@ export default function EnhancedSmartSuggestPanel({
       }`}
       style={mode === 'overlay' ? { border: '1px solid #cf89e1' } : {}}
     >
-      {/* Content container - height matches content */}
-      <div className="w-full h-full px-6 py-8 overflow-y-auto">
+      {/* Content container - height matches content with bottom padding for fixed input */}
+      <div className="w-full h-full px-6 py-8 pb-32 overflow-y-auto relative">
         {/* Action row */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-2">
@@ -147,19 +168,6 @@ export default function EnhancedSmartSuggestPanel({
           </TooltipProvider>
         </div>
 
-        {/* HeaderInput component */}
-        <div className="mb-8">
-          <HeaderInput 
-            onSmartSuggestOpen={onSmartSuggestOpen}
-            placeholder="What would you like to know?"
-            className="w-full"
-            hideBadge={true}
-            onSubmit={handleInputSubmit}
-            value={inputValue}
-            onChange={setInputValue}
-          />
-        </div>
-
         {/* Content sections - conditional rendering */}
         {showStockResponse ? (
           <div className="space-y-4">
@@ -176,7 +184,7 @@ export default function EnhancedSmartSuggestPanel({
             </div>
             
             {/* Stock Response */}
-            <div className="overflow-y-auto max-h-[calc(100vh-200px)]">
+            <div className="overflow-y-auto max-h-[calc(100vh-300px)]">
               <StockResponse
                 stockData={appleStockData}
                 newsItems={appleNewsItems}
@@ -191,7 +199,7 @@ export default function EnhancedSmartSuggestPanel({
             <div>
               <h3 className="font-semibold text-sm mb-3">Recent quotes</h3>
               <div className="space-y-2">
-                {quantumQuotes.map((quote, index) => (
+                {quantumQuotes.slice(0, 3).map((quote, index) => (
                   <Quote
                     key={index}
                     ticker={quote.ticker}
@@ -215,39 +223,50 @@ export default function EnhancedSmartSuggestPanel({
               </div>
             </div>
 
-            {/* Notices section - placeholder */}
-            <div className="bg-white rounded-lg p-6 shadow-sm">
-              <h3 className="font-semibold text-lg mb-4">Notices</h3>
-              <div className="space-y-4">
-                <div className="bg-blue-50 p-4 rounded-lg">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-sm font-medium text-blue-900">Did you know?</span>
-                    </div>
-                    <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full">2</span>
-                  </div>
-                  <p className="text-sm text-blue-700 mt-2">
-                    Helpful features to get the most from your assistant.
-                  </p>
+            {/* Your day section */}
+            <div>
+              <h3 className="font-semibold text-sm mb-3">Your day</h3>
+              
+              {/* Short content slot */}
+              <div className="mb-3 p-3 bg-gray-50 rounded-lg">
+                <p className="text-sm text-gray-700">
+                  It appears to be a mixed day for the markets, with several factors influencing different sectors.
+                </p>
+              </div>
+              
+              {/* Tighter alerts */}
+              <div className="space-y-1">
+                <div className="flex items-center justify-between py-2 px-3 bg-blue-50 rounded-lg">
+                  <span className="text-sm font-medium text-blue-900">Assistant tips</span>
+                  <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full">2</span>
                 </div>
                 
-                <div className="bg-orange-50 p-4 rounded-lg">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
-                      <span className="text-sm font-medium text-orange-900">Insights</span>
-                    </div>
-                    <span className="bg-orange-500 text-white text-xs px-2 py-1 rounded-full">5</span>
-                  </div>
-                  <p className="text-sm text-orange-700 mt-2">
-                    Summaries and trends from your account activities.
-                  </p>
+                <div className="flex items-center justify-between py-2 px-3 bg-orange-50 rounded-lg">
+                  <span className="text-sm font-medium text-orange-900">Portfolio insights</span>
+                  <span className="bg-orange-500 text-white text-xs px-2 py-1 rounded-full">5</span>
                 </div>
               </div>
             </div>
           </div>
         )}
+      </div>
+      
+      {/* Fixed EnhancedInput at bottom */}
+      <div className={`${
+        mode === 'overlay' 
+          ? 'absolute bottom-0 left-0 right-0 px-6 pt-2 pb-6 bg-white rounded-b-2xl'
+          : 'absolute bottom-0 right-0 w-[368px] py-6 bg-white border-t border-gray-200'
+      }`}>
+        <EnhancedInput 
+          onSmartSuggestOpen={onSmartSuggestOpen}
+          placeholder="What would you like to know?"
+          className={`${mode === 'overlay' ? 'w-3/4 mx-auto' : 'w-full'}`}
+          hideBadge={true}
+          onSubmit={handleInputSubmit}
+          value={inputValue}
+          onChange={setInputValue}
+          mode={mode}
+        />
       </div>
     </div>
   );
