@@ -20,7 +20,7 @@ import AskSuggestions from './AskSuggestions';
 import AnswerDisplay from './AnswerDisplay';
 import Resources from './Resources';
 import { quantumQuotes } from '@/data/quantumQuotes';
-import { appleStockData, appleNewsItems, relatedStocks, appleCompanyDescription } from '@/data/appleStockData';
+import { getStockData } from '@/data/stockData';
 import { filterTickerData, TickerData, filterAskData, AskData } from '@/data/responseModeData';
 
 interface EnhancedSmartSuggestPanelV2Props {
@@ -59,6 +59,9 @@ export default function EnhancedSmartSuggestPanelV2({
   const [selectedAskData, setSelectedAskData] = useState<AskData | undefined>();
   const [currentQuery, setCurrentQuery] = useState<string>('');
   
+  // State for selected stock data
+  const [selectedStockData, setSelectedStockData] = useState<ReturnType<typeof getStockData> | null>(null);
+  
   // Ref for the panel element
   const panelRef = useRef<HTMLDivElement>(null);
   
@@ -71,12 +74,16 @@ export default function EnhancedSmartSuggestPanelV2({
 
   // Handle input submission
   const handleInputSubmit = (value: string) => {
-    const trimmedValue = value.trim().toLowerCase();
+    const trimmedValue = value.trim();
     
     // Clear input for all searches
     setInputValue('');
     
-    if (trimmedValue === 'aapl') {
+    // Check if the input matches any supported stock
+    const stockData = getStockData(trimmedValue);
+    
+    if (stockData) {
+      setSelectedStockData(stockData);
       setPanelState('conversation');
     } else {
       // Handle other searches
@@ -119,6 +126,7 @@ export default function EnhancedSmartSuggestPanelV2({
   const handleBackToSearch = () => {
     setPanelState('overview');
     setInputValue('');
+    setSelectedStockData(null);
   };
 
   // Handle mode switching
@@ -268,12 +276,14 @@ export default function EnhancedSmartSuggestPanelV2({
             
             {/* Stock Response */}
             <div className="overflow-y-auto max-h-[calc(100vh-300px)]">
-              <StockResponse
-                stockData={appleStockData}
-                newsItems={appleNewsItems}
-                relatedStocks={relatedStocks}
-                companyDescription={appleCompanyDescription}
-              />
+              {selectedStockData && (
+                <StockResponse
+                  stockData={selectedStockData.stockData}
+                  newsItems={selectedStockData.newsItems}
+                  relatedStocks={selectedStockData.relatedStocks}
+                  companyDescription={selectedStockData.companyDescription}
+                />
+              )}
             </div>
           </div>
         ) : panelState === 'suggest' ? (

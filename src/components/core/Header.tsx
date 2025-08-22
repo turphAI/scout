@@ -1,11 +1,11 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { Briefcase, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import HeaderInput from './HeaderInput';
 import EnhancedSmartSuggestPanelV2 from './EnhancedSmartSuggestPanelV2';
+import LogoutDropdown from './LogoutDropdown';
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -35,13 +35,7 @@ export default function Header({
   isOverlayOpen,
   onOverlayClose,
 }: HeaderProps) {
-  const router = useRouter();
   const [isSmartSuggestOpen, setIsSmartSuggestOpen] = useState(false);
-
-  const handleLogout = () => {
-    router.push('/');
-    onLogout?.();
-  };
 
   const handleSmartSuggestOpen = () => {
     setIsSmartSuggestOpen(true);
@@ -70,9 +64,7 @@ export default function Header({
             <User className="w-4 h-4" /> Profile
           </Button>
           <Button variant="ghost">Open an account</Button>
-          <Button variant="ghost" onClick={handleLogout}>
-            Log out
-          </Button>
+          <LogoutDropdown onLogout={onLogout} />
         </div>
       </div>
 

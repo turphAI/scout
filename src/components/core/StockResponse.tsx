@@ -3,7 +3,10 @@
 import React from 'react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { TrendingUp, TrendingDown, Building2, Users, Calendar, MapPin, Globe } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { TrendingUp, TrendingDown, Building2, Users, Calendar, MapPin, Globe, BarChart3, Bell, Filter, Maximize2 } from 'lucide-react';
+import ConversationalButtonWithIcon from './ConversationalButton';
 
 interface StockData {
   ticker: string;
@@ -75,7 +78,7 @@ export default function StockResponse({
         <span className="font-medium">{stockData.ticker}:NASDAQ</span>
       </div>
 
-      {/* Main Stock Info */}
+              {/* Main Stock Info */}
       <Card className="p-6">
         <div className="flex justify-between items-start mb-6">
           <div>
@@ -115,6 +118,32 @@ export default function StockResponse({
               <div className="text-xs text-gray-600">4:05 PM</div>
             </div>
           )}
+        </div>
+
+        {/* Action Strip */}
+        <div className="flex justify-between items-center mb-6">
+          <div className="flex gap-3">
+            <Button className="bg-black text-white hover:bg-gray-800 px-6 py-2">
+              Buy
+            </Button>
+            <Button variant="outline" className="border-black text-black hover:bg-gray-50 px-6 py-2">
+              Sell
+            </Button>
+          </div>
+          <div className="flex gap-2">
+            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+              <BarChart3 className="h-4 w-4" />
+            </Button>
+            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+              <Bell className="h-4 w-4" />
+            </Button>
+            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+              <Filter className="h-4 w-4" />
+            </Button>
+            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+              <Maximize2 className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
 
         {/* Chart Placeholder */}
@@ -170,93 +199,118 @@ export default function StockResponse({
             <span className="ml-auto text-sm text-gray-600">Zoom: 1x</span>
           </div>
         </div>
-
-        {/* Navigation Tabs */}
-        <div className="flex border-b">
-          {['Overview', 'Earnings', 'Financials'].map((tab) => (
-            <button
-              key={tab}
-              className={`px-4 py-2 text-sm font-medium border-b-2 ${
-                tab === 'Overview'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-600 hover:text-gray-900'
-              }`}
-            >
-              {tab}
-            </button>
-          ))}
-        </div>
       </Card>
 
-      {/* Financial Metrics */}
-      <Card className="p-6">
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-4 text-sm">
-          <div>
-            <div className="text-gray-600">Open</div>
-            <div className="font-medium">{stockData.open}</div>
-          </div>
-          <div>
-            <div className="text-gray-600">High</div>
-            <div className="font-medium">{stockData.high}</div>
-          </div>
-          <div>
-            <div className="text-gray-600">Low</div>
-            <div className="font-medium">{stockData.low}</div>
-          </div>
-          <div>
-            <div className="text-gray-600">Mkt. cap</div>
-            <div className="font-medium">{stockData.marketCap}</div>
-          </div>
-          <div>
-            <div className="text-gray-600">Avg. vol.</div>
-            <div className="font-medium">{stockData.avgVolume}</div>
-          </div>
-          <div>
-            <div className="text-gray-600">Volume</div>
-            <div className="font-medium">{stockData.volume}</div>
-          </div>
-          <div>
-            <div className="text-gray-600">Dividend</div>
-            <div className="font-medium">{stockData.dividendYield}</div>
-          </div>
-          <div>
-            <div className="text-gray-600">Quarterly dividend</div>
-            <div className="font-medium">{stockData.dividend}</div>
-          </div>
-          <div>
-            <div className="text-gray-600">Ex dividend date</div>
-            <div className="font-medium">{stockData.exDividendDate}</div>
-          </div>
-          <div>
-            <div className="text-gray-600">P/E ratio</div>
-            <div className="font-medium">{stockData.peRatio}</div>
-          </div>
-          <div>
-            <div className="text-gray-600">52-wk high</div>
-            <div className="font-medium">$260.09</div>
-          </div>
-          <div>
-            <div className="text-gray-600">52-wk low</div>
-            <div className="font-medium">$169.21</div>
-          </div>
-          <div>
-            <div className="text-gray-600">EPS</div>
-            <div className="font-medium">{stockData.eps}</div>
-          </div>
-          <div>
-            <div className="text-gray-600">Beta</div>
-            <div className="font-medium">{stockData.beta}</div>
-          </div>
-          <div>
-            <div className="text-gray-600">Shares outstanding</div>
-            <div className="font-medium">{stockData.sharesOutstanding}</div>
-          </div>
-          <div>
-            <div className="text-gray-600">No. of employees</div>
-            <div className="font-medium">{stockData.employees}</div>
-          </div>
-        </div>
-      </Card>
+      {/* Main Tabs */}
+      <Tabs defaultValue="overview" className="w-full">
+        <TabsList className="grid w-full grid-cols-7">
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="chart">Chart+</TabsTrigger>
+          <TabsTrigger value="dividends">Dividends & Earnings</TabsTrigger>
+          <TabsTrigger value="sentiment">Sentiment</TabsTrigger>
+          <TabsTrigger value="analyst">Analyst Ratings</TabsTrigger>
+          <TabsTrigger value="comparisons">Comparisons</TabsTrigger>
+          <TabsTrigger value="statistics">Statistics</TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value="overview" className="mt-6">
+          {/* Financial Metrics */}
+          <Card className="p-6">
+            <div className="grid grid-cols-2 md:grid-cols-6 gap-4 text-sm">
+              <div>
+                <div className="text-gray-600">Open</div>
+                <div className="font-medium">{stockData.open}</div>
+              </div>
+              <div>
+                <div className="text-gray-600">High</div>
+                <div className="font-medium">{stockData.high}</div>
+              </div>
+              <div>
+                <div className="text-gray-600">Low</div>
+                <div className="font-medium">{stockData.low}</div>
+              </div>
+              <div>
+                <div className="text-gray-600">Mkt. cap</div>
+                <div className="font-medium">{stockData.marketCap}</div>
+              </div>
+              <div>
+                <div className="text-gray-600">Avg. vol.</div>
+                <div className="font-medium">{stockData.avgVolume}</div>
+              </div>
+              <div>
+                <div className="text-gray-600">Volume</div>
+                <div className="font-medium">{stockData.volume}</div>
+              </div>
+              <div>
+                <div className="text-gray-600">Dividend</div>
+                <div className="font-medium">{stockData.dividendYield}</div>
+              </div>
+              <div>
+                <div className="text-gray-600">Quarterly dividend</div>
+                <div className="font-medium">{stockData.dividend}</div>
+              </div>
+              <div>
+                <div className="text-gray-600">Ex dividend date</div>
+                <div className="font-medium">{stockData.exDividendDate}</div>
+              </div>
+              <div>
+                <div className="text-gray-600">P/E ratio</div>
+                <div className="font-medium">{stockData.peRatio}</div>
+              </div>
+              <div>
+                <div className="text-gray-600">52-wk high</div>
+                <div className="font-medium">$260.09</div>
+              </div>
+              <div>
+                <div className="text-gray-600">52-wk low</div>
+                <div className="font-medium">$169.21</div>
+              </div>
+              <div>
+                <div className="text-gray-600">EPS</div>
+                <div className="font-medium">{stockData.eps}</div>
+              </div>
+              <div>
+                <div className="text-gray-600">Beta</div>
+                <div className="font-medium">{stockData.beta}</div>
+              </div>
+              <div>
+                <div className="text-gray-600">Shares outstanding</div>
+                <div className="font-medium">{stockData.sharesOutstanding}</div>
+              </div>
+              <div>
+                <div className="text-gray-600">No. of employees</div>
+                <div className="font-medium">{stockData.employees}</div>
+              </div>
+            </div>
+          </Card>
+        </TabsContent>
+        
+        <TabsContent value="chart" className="mt-6">
+          {/* Chart+ content will go here */}
+        </TabsContent>
+        
+        <TabsContent value="dividends" className="mt-6">
+          {/* Dividends & Earnings content will go here */}
+        </TabsContent>
+        
+        <TabsContent value="sentiment" className="mt-6">
+          {/* Sentiment content will go here */}
+        </TabsContent>
+        
+        <TabsContent value="analyst" className="mt-6">
+          {/* Analyst Ratings content will go here */}
+        </TabsContent>
+        
+        <TabsContent value="comparisons" className="mt-6">
+          {/* Comparisons content will go here */}
+        </TabsContent>
+        
+        <TabsContent value="statistics" className="mt-6">
+          {/* Statistics content will go here */}
+        </TabsContent>
+      </Tabs>
+
+
 
       {/* News Stories */}
       <Card className="p-6">
@@ -307,6 +361,37 @@ export default function StockResponse({
               </div>
             </div>
           ))}
+        </div>
+      </Card>
+
+      {/* Conversation Buttons */}
+      <Card className="p-6">
+        <h3 className="text-lg font-semibold mb-4">Related Questions</h3>
+        <div className="flex flex-wrap gap-3">
+          <ConversationalButtonWithIcon>
+            What&apos;s {stockData.companyName}&apos;s growth strategy for 2024?
+          </ConversationalButtonWithIcon>
+          <ConversationalButtonWithIcon>
+            How does {stockData.companyName} compare to competitors?
+          </ConversationalButtonWithIcon>
+          <ConversationalButtonWithIcon>
+            What are the risks to {stockData.companyName}&apos;s business?
+          </ConversationalButtonWithIcon>
+          <ConversationalButtonWithIcon>
+            Should I buy {stockData.ticker} stock now?
+          </ConversationalButtonWithIcon>
+          <ConversationalButtonWithIcon>
+            What&apos;s {stockData.companyName}&apos;s dividend history?
+          </ConversationalButtonWithIcon>
+          <ConversationalButtonWithIcon>
+            How does {stockData.companyName} perform in bear markets?
+          </ConversationalButtonWithIcon>
+          <ConversationalButtonWithIcon>
+            What&apos;s the outlook for {stockData.companyName}?
+          </ConversationalButtonWithIcon>
+          <ConversationalButtonWithIcon>
+            How does {stockData.ticker}&apos;s P/E ratio compare to peers?
+          </ConversationalButtonWithIcon>
         </div>
       </Card>
 
