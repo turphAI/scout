@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Search, Sparkles, ArrowUpCircle } from 'lucide-react';
+import { Sparkles, ArrowUpCircle } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -91,7 +91,7 @@ export default function EnhancedInputV2({
         {/* Combined tabs and action row */}
         <div className="flex items-center justify-between">
           <Tabs value={activeTab} onValueChange={(value) => {
-            setActiveTab(value);
+            setActiveTab(value as 'ticker' | 'ask');
             onModeSwitch?.(value as 'ticker' | 'ask');
           }} className="w-full" onClick={(e) => e.stopPropagation()}>
             <TabsList className="grid w-32 grid-cols-2 h-8" style={{ backgroundColor: '#F4E7F8' }}>

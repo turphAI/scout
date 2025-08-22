@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { AskData } from '@/data/responseModeData';
 import ConversationalButtonWithIcon from './ConversationalButton';
 
 interface AskSuggestionsProps {

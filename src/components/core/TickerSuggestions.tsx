@@ -24,7 +24,7 @@ export default function TickerSuggestions({ suggestions, onSuggestionClick }: Ti
     <div>
       <h3 className="font-semibold text-sm mb-3">Suggestions</h3>
       <div className="space-y-2">
-        {suggestions.slice(0, 5).map((ticker, index) => (
+        {suggestions.slice(0, 5).map((ticker) => (
           <div
             key={ticker.symbol}
             className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 cursor-pointer transition-colors"

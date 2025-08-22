@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { X, Sparkles, AudioLines, PanelRight, PanelTop } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -16,9 +16,12 @@ import StockResponse from './StockResponse';
 import TickerSuggestions from './TickerSuggestions';
 import SimpleQuote from './SimpleQuote';
 import NewsAndEvents from './NewsAndEvents';
+import AskSuggestions from './AskSuggestions';
+import AnswerDisplay from './AnswerDisplay';
+import Resources from './Resources';
 import { quantumQuotes } from '@/data/quantumQuotes';
 import { appleStockData, appleNewsItems, relatedStocks, appleCompanyDescription } from '@/data/appleStockData';
-import { filterTickerData, TickerData } from '@/data/responseModeData';
+import { filterTickerData, TickerData, filterAskData, AskData } from '@/data/responseModeData';
 
 interface EnhancedSmartSuggestPanelV2Props {
   isOpen: boolean;
@@ -51,6 +54,11 @@ export default function EnhancedSmartSuggestPanelV2({
   const [filteredTickerData, setFilteredTickerData] = useState<TickerData[]>([]);
   const [selectedTicker, setSelectedTicker] = useState<TickerData | undefined>();
   
+  // State for ask mode data
+  const [filteredAskData, setFilteredAskData] = useState<AskData[]>([]);
+  const [selectedAskData, setSelectedAskData] = useState<AskData | undefined>();
+  const [currentQuery, setCurrentQuery] = useState<string>('');
+  
   // Ref for the panel element
   const panelRef = useRef<HTMLDivElement>(null);
   
@@ -80,16 +88,29 @@ export default function EnhancedSmartSuggestPanelV2({
   // Handle input change for reactive filtering
   const handleInputChange = (value: string) => {
     setInputValue(value);
+    setCurrentQuery(value);
     
-    if (responseMode === 'ticker' && panelState === 'suggest') {
-      if (value.trim() === '') {
-        setFilteredTickerData([]);
-        setSelectedTicker(undefined);
-      } else {
-        const filtered = filterTickerData(value);
-        setFilteredTickerData(filtered);
-        // Auto-select first result if available
-        setSelectedTicker(filtered.length > 0 ? filtered[0] : undefined);
+    if (panelState === 'suggest') {
+      if (responseMode === 'ticker') {
+        if (value.trim() === '') {
+          setFilteredTickerData([]);
+          setSelectedTicker(undefined);
+        } else {
+          const filtered = filterTickerData(value);
+          setFilteredTickerData(filtered);
+          // Auto-select first result if available
+          setSelectedTicker(filtered.length > 0 ? filtered[0] : undefined);
+        }
+      } else if (responseMode === 'ask') {
+        if (value.trim() === '') {
+          setFilteredAskData([]);
+          setSelectedAskData(undefined);
+        } else {
+          const filtered = filterAskData(value);
+          setFilteredAskData(filtered);
+          // Auto-select first result if available
+          setSelectedAskData(filtered.length > 0 ? filtered[0] : undefined);
+        }
       }
     }
   };
@@ -105,13 +126,28 @@ export default function EnhancedSmartSuggestPanelV2({
     setResponseMode(mode);
     setPanelState('overview');
     setInputValue('');
+    setCurrentQuery('');
     setFilteredTickerData([]);
     setSelectedTicker(undefined);
+    setFilteredAskData([]);
+    setSelectedAskData(undefined);
   };
 
   // Handle ticker suggestion click
   const handleTickerSuggestionClick = (ticker: TickerData) => {
     setSelectedTicker(ticker);
+  };
+
+  // Handle ask suggestion click
+  const handleAskSuggestionClick = (suggestion: string) => {
+    // Find the ask data that contains this suggestion
+    const askData = filteredAskData.find(data => 
+      data.suggestions.includes(suggestion)
+    );
+    if (askData) {
+      setSelectedAskData(askData);
+      setCurrentQuery(suggestion);
+    }
   };
 
   return (
@@ -258,9 +294,25 @@ export default function EnhancedSmartSuggestPanelV2({
                 </div>
               </>
             ) : (
-              <div className="col-span-3 text-center py-8">
-                <p className="text-gray-500">Ask mode coming in Phase 3...</p>
-              </div>
+              <>
+                <div className="overflow-y-auto max-h-[calc(100vh-300px)]">
+                  <AskSuggestions 
+                    suggestions={selectedAskData?.suggestions || filteredAskData.flatMap(data => data.suggestions)}
+                    onSuggestionClick={handleAskSuggestionClick}
+                  />
+                </div>
+                <div className="overflow-y-auto max-h-[calc(100vh-300px)]">
+                  <AnswerDisplay 
+                    answer={selectedAskData?.answer}
+                    query={currentQuery}
+                  />
+                </div>
+                <div className="overflow-y-auto max-h-[calc(100vh-300px)]">
+                  <Resources 
+                    resources={selectedAskData?.resources || []}
+                  />
+                </div>
+              </>
             )}
           </div>
         ) : (
