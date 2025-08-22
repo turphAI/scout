@@ -9,14 +9,14 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import EnhancedInput from './EnhancedInput';
+import EnhancedInputV2 from './EnhancedInputV2';
 import Quote from './Quote';
 import ConversationalButtonWithIcon from './ConversationalButton';
 import StockResponse from './StockResponse';
 import { quantumQuotes } from '@/data/quantumQuotes';
 import { appleStockData, appleNewsItems, relatedStocks, appleCompanyDescription } from '@/data/appleStockData';
 
-interface EnhancedSmartSuggestPanelProps {
+interface EnhancedSmartSuggestPanelV2Props {
   isOpen: boolean;
   onClose: () => void;
   onSmartSuggestOpen?: () => void;
@@ -26,14 +26,15 @@ interface EnhancedSmartSuggestPanelProps {
   onModeChange?: (mode: 'overlay' | 'sidecar') => void;
 }
 
-export default function EnhancedSmartSuggestPanel({
+export default function EnhancedSmartSuggestPanelV2({
   isOpen,
   onClose,
   onSmartSuggestOpen,
   mode,
   isRightPanel: externalIsRightPanel,
   onModeChange
-}: EnhancedSmartSuggestPanelProps) {
+}: EnhancedSmartSuggestPanelV2Props) {
+  console.log('EnhancedSmartSuggestPanelV2 rendered with mode:', mode);
   // Use external state if provided, otherwise use internal state
   const isRightPanel = externalIsRightPanel !== undefined ? externalIsRightPanel : false;
   
@@ -104,7 +105,7 @@ export default function EnhancedSmartSuggestPanel({
         style={mode === 'overlay' ? { border: '1px solid #cf89e1' } : {}}
       >
       {/* Content container - height matches content with bottom padding for fixed input */}
-      <div className="w-full h-full px-6 py-8 pb-32 overflow-y-auto relative">
+      <div className="w-full h-full px-6 py-8 pb-40 overflow-y-auto relative">
         {/* Action row */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-2">
@@ -256,15 +257,14 @@ export default function EnhancedSmartSuggestPanel({
         )}
       </div>
       
-      {/* Fixed EnhancedInput at bottom */}
+      {/* Fixed EnhancedInputV2 at bottom */}
       <div className={`${
         mode === 'overlay' 
           ? 'absolute bottom-0 left-0 right-0 px-6 pt-2 pb-6 bg-white rounded-b-2xl'
           : 'absolute bottom-0 right-0 w-[368px] py-6 bg-white border-t border-gray-200'
       }`}>
-        <EnhancedInput 
+        <EnhancedInputV2 
           onSmartSuggestOpen={onSmartSuggestOpen}
-          placeholder="What would you like to know?"
           className={`${mode === 'overlay' ? 'w-3/4 mx-auto' : 'w-full'}`}
           hideBadge={true}
           onSubmit={handleInputSubmit}

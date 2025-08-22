@@ -22,8 +22,25 @@ export function SearchToSuggestionsDemo() {
               Clicking the header search input opens a full width richer smart suggestion panel. A replacement for the chatbot landing experience.
             </p>
             
+            {/* Panel v2 Tile */}
+            <Link href="/enhancedSS/panelV2" className="block">
+              <div className="bg-muted/50 rounded-lg p-4 hover:bg-muted/70 transition-colors cursor-pointer">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <h3 className="text-lg font-semibold text-blue-600 mb-2">Panel v2</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Enhanced panel experience with more robust features
+                    </p>
+                  </div>
+                  <span className="px-3 py-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded-full">
+                    In Progress
+                  </span>
+                </div>
+              </div>
+            </Link>
+
             {/* Panel v1 Tile */}
-            <Link href="/enhancedSS/panelV1" className="block">
+            <Link href="/enhancedSS/panelV1" className="block mt-4">
               <div className="bg-muted/50 rounded-lg p-4 hover:bg-muted/70 transition-colors cursor-pointer">
                 <div className="flex items-start justify-between">
                   <div>
@@ -32,8 +49,25 @@ export function SearchToSuggestionsDemo() {
                       Just getting the framework of the panel situated
                     </p>
                   </div>
-                  <span className="px-3 py-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded-full">
-                    In Progress
+                  <span className="px-3 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">
+                    Complete
+                  </span>
+                </div>
+              </div>
+            </Link>
+
+            {/* Panel Click Test Tile */}
+            <Link href="/test-panel-click" className="block mt-4">
+              <div className="bg-muted/50 rounded-lg p-4 hover:bg-muted/70 transition-colors cursor-pointer">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <h3 className="text-lg font-semibold text-blue-600 mb-2">Panel Click Test</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Test the click outside functionality for overlay panels
+                    </p>
+                  </div>
+                  <span className="px-3 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
+                    Test
                   </span>
                 </div>
               </div>
