@@ -16,6 +16,9 @@ interface EnhancedInputV2Props {
   value?: string;
   onChange?: (value: string) => void;
   mode?: 'overlay' | 'sidecar';
+  responseMode?: 'ticker' | 'ask';
+  onModeSwitch?: (mode: 'ticker' | 'ask') => void;
+  onInputFocus?: () => void;
 }
 
 export default function EnhancedInputV2({
@@ -26,14 +29,18 @@ export default function EnhancedInputV2({
   hideBadge = false,
   value,
   onChange,
-  mode = 'overlay'
+  mode = 'overlay',
+  responseMode = 'ticker',
+  onModeSwitch,
+  onInputFocus
 }: EnhancedInputV2Props) {
   console.log('EnhancedInputV2 rendered with mode:', mode);
-  const [activeTab, setActiveTab] = useState("ticker");
+  const [activeTab, setActiveTab] = useState(responseMode);
   
   const handleFocus = () => {
     onFocus?.();
     onSmartSuggestOpen?.();
+    onInputFocus?.();
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -83,7 +90,10 @@ export default function EnhancedInputV2({
 
         {/* Combined tabs and action row */}
         <div className="flex items-center justify-between">
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full" onClick={(e) => e.stopPropagation()}>
+          <Tabs value={activeTab} onValueChange={(value) => {
+            setActiveTab(value);
+            onModeSwitch?.(value as 'ticker' | 'ask');
+          }} className="w-full" onClick={(e) => e.stopPropagation()}>
             <TabsList className="grid w-32 grid-cols-2 h-8" style={{ backgroundColor: '#F4E7F8' }}>
               <TabsTrigger 
                 value="ticker" 

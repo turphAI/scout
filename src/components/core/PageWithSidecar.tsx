@@ -1,7 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
-import EnhancedSmartSuggestPanel from './EnhancedSmartSuggestPanel';
+import React from 'react';
 
 interface PageWithSidecarProps {
   children: React.ReactNode;
@@ -14,37 +13,8 @@ interface PageWithSidecarProps {
 }
 
 export default function PageWithSidecar({ 
-  children, 
-  sidecarMode = 'sidecar',
-  onSidecarClose,
-  onPanelModeChange,
-  isOverlayOpen = false
+  children
 }: PageWithSidecarProps) {
-  const [isRightPanel, setIsRightPanel] = useState(false);
-
-  const handleSmartSuggestClose = () => {
-    onSidecarClose?.();
-  };
-
-  // If sidecar mode is overlay, render children normally with overlay panel
-  if (sidecarMode === 'overlay') {
-    return (
-      <>
-        {children}
-        {isOverlayOpen && (
-          <EnhancedSmartSuggestPanel
-            isOpen={isOverlayOpen}
-            onClose={handleSmartSuggestClose}
-            mode="overlay"
-            isRightPanel={isRightPanel}
-            onTogglePanel={() => setIsRightPanel(!isRightPanel)}
-            onModeChange={onPanelModeChange}
-          />
-        )}
-      </>
-    );
-  }
-
-  // If sidecar mode is sidecar, just render children (sidecar handled separately)
+  // Render children normally - panel handling is done in the parent component
   return <>{children}</>;
 }

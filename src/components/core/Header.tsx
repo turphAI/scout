@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Briefcase, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import HeaderInput from './HeaderInput';
-import EnhancedSmartSuggestPanel from './EnhancedSmartSuggestPanel';
+import EnhancedSmartSuggestPanelV2 from './EnhancedSmartSuggestPanelV2';
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -112,7 +112,7 @@ export default function Header({
       
       {/* Enhanced Smart Suggest Panel - Overlay Mode */}
       {showOverlayPanel && (isSmartSuggestOpen || !!isOverlayOpen) && (
-        <EnhancedSmartSuggestPanel
+        <EnhancedSmartSuggestPanelV2
           isOpen={isSmartSuggestOpen || !!isOverlayOpen}
           onClose={handleSmartSuggestClose}
           onSmartSuggestOpen={handleSmartSuggestOpen}

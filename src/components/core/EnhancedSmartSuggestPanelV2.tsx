@@ -13,8 +13,12 @@ import EnhancedInputV2 from './EnhancedInputV2';
 import Quote from './Quote';
 import ConversationalButtonWithIcon from './ConversationalButton';
 import StockResponse from './StockResponse';
+import TickerSuggestions from './TickerSuggestions';
+import SimpleQuote from './SimpleQuote';
+import NewsAndEvents from './NewsAndEvents';
 import { quantumQuotes } from '@/data/quantumQuotes';
 import { appleStockData, appleNewsItems, relatedStocks, appleCompanyDescription } from '@/data/appleStockData';
+import { filterTickerData, TickerData } from '@/data/responseModeData';
 
 interface EnhancedSmartSuggestPanelV2Props {
   isOpen: boolean;
@@ -38,9 +42,14 @@ export default function EnhancedSmartSuggestPanelV2({
   // Use external state if provided, otherwise use internal state
   const isRightPanel = externalIsRightPanel !== undefined ? externalIsRightPanel : false;
   
-  // State for handling stock response
-  const [showStockResponse, setShowStockResponse] = useState(false);
+  // State for handling panel states
+  const [panelState, setPanelState] = useState<'overview' | 'suggest' | 'conversation'>('overview');
+  const [responseMode, setResponseMode] = useState<'ticker' | 'ask'>('ticker');
   const [inputValue, setInputValue] = useState('');
+  
+  // State for ticker mode data
+  const [filteredTickerData, setFilteredTickerData] = useState<TickerData[]>([]);
+  const [selectedTicker, setSelectedTicker] = useState<TickerData | undefined>();
   
   // Ref for the panel element
   const panelRef = useRef<HTMLDivElement>(null);
@@ -60,7 +69,7 @@ export default function EnhancedSmartSuggestPanelV2({
     setInputValue('');
     
     if (trimmedValue === 'aapl') {
-      setShowStockResponse(true);
+      setPanelState('conversation');
     } else {
       // Handle other searches
       console.log('Search submitted:', value);
@@ -68,10 +77,41 @@ export default function EnhancedSmartSuggestPanelV2({
     }
   };
 
+  // Handle input change for reactive filtering
+  const handleInputChange = (value: string) => {
+    setInputValue(value);
+    
+    if (responseMode === 'ticker' && panelState === 'suggest') {
+      if (value.trim() === '') {
+        setFilteredTickerData([]);
+        setSelectedTicker(undefined);
+      } else {
+        const filtered = filterTickerData(value);
+        setFilteredTickerData(filtered);
+        // Auto-select first result if available
+        setSelectedTicker(filtered.length > 0 ? filtered[0] : undefined);
+      }
+    }
+  };
+
   // Handle back to search
   const handleBackToSearch = () => {
-    setShowStockResponse(false);
+    setPanelState('overview');
     setInputValue('');
+  };
+
+  // Handle mode switching
+  const handleModeSwitch = (mode: 'ticker' | 'ask') => {
+    setResponseMode(mode);
+    setPanelState('overview');
+    setInputValue('');
+    setFilteredTickerData([]);
+    setSelectedTicker(undefined);
+  };
+
+  // Handle ticker suggestion click
+  const handleTickerSuggestionClick = (ticker: TickerData) => {
+    setSelectedTicker(ticker);
   };
 
   return (
@@ -79,7 +119,8 @@ export default function EnhancedSmartSuggestPanelV2({
       {/* Backdrop overlay for click outside detection */}
       {mode === 'overlay' && isOpen && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-25 z-40"
+          className="fixed inset-0 z-40"
+          style={{ backgroundColor: 'rgba(0, 0, 0, 0.15)' }}
           onClick={() => {
             console.log('Backdrop clicked - closing panel');
             onClose();
@@ -94,7 +135,7 @@ export default function EnhancedSmartSuggestPanelV2({
             ? `fixed z-50 mx-1 bg-white rounded-2xl ${
                 isRightPanel 
                   ? 'top-0 right-0 bottom-0 w-96' 
-                  : 'top-12 left-0 right-0'
+                  : 'top-12 left-0 right-0 max-h-[calc(100vh-6rem)]'
               }`
             : `w-full h-full bg-white ${
                 isRightPanel 
@@ -175,7 +216,7 @@ export default function EnhancedSmartSuggestPanelV2({
         </div>
 
         {/* Content sections - conditional rendering */}
-        {showStockResponse ? (
+        {panelState === 'conversation' ? (
           <div className="space-y-4">
             {/* Back button */}
             <div className="flex items-center gap-2 mb-4">
@@ -198,6 +239,29 @@ export default function EnhancedSmartSuggestPanelV2({
                 companyDescription={appleCompanyDescription}
               />
             </div>
+          </div>
+        ) : panelState === 'suggest' ? (
+          <div className={mode === 'sidecar' ? 'space-y-8' : 'grid grid-cols-1 lg:grid-cols-3 gap-8'}>
+            {responseMode === 'ticker' ? (
+              <>
+                <div className="overflow-y-auto max-h-[calc(100vh-300px)]">
+                  <TickerSuggestions 
+                    suggestions={filteredTickerData}
+                    onSuggestionClick={handleTickerSuggestionClick}
+                  />
+                </div>
+                <div className="overflow-y-auto max-h-[calc(100vh-300px)]">
+                  <SimpleQuote ticker={selectedTicker} />
+                </div>
+                <div className="overflow-y-auto max-h-[calc(100vh-300px)]">
+                  <NewsAndEvents ticker={selectedTicker} />
+                </div>
+              </>
+            ) : (
+              <div className="col-span-3 text-center py-8">
+                <p className="text-gray-500">Ask mode coming in Phase 3...</p>
+              </div>
+            )}
           </div>
         ) : (
           <div className={mode === 'sidecar' ? 'space-y-8' : 'grid grid-cols-1 lg:grid-cols-3 gap-8'}>
@@ -269,8 +333,15 @@ export default function EnhancedSmartSuggestPanelV2({
           hideBadge={true}
           onSubmit={handleInputSubmit}
           value={inputValue}
-          onChange={setInputValue}
+          onChange={handleInputChange}
           mode={mode}
+          responseMode={responseMode}
+          onModeSwitch={handleModeSwitch}
+          onInputFocus={() => {
+            if (panelState === 'overview') {
+              setPanelState('suggest');
+            }
+          }}
         />
       </div>
     </div>

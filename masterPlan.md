@@ -132,6 +132,35 @@ The fundamental issue is that users expect limited capabilities from chatbot int
 - Validate against success indicators
 - Document learnings for future development
 
+
+## Key feature: Response mode
+With a toggle in the input area for Ticker and Ask discovery, we are putting some pathing decisions on the user. Toggle selection will drive our prototype use cases. Each mode will determine how the different states of the panel behave.
+
+### Panel states
+There are three panel states; Overview, Suggest, Conversation.
+
+#### Overview state
+This is the default view which displays on click in the header. It is the base/home view and is highly personalized to the user based on behavior and events. This is what we have designed today, so no change here for now.
+
+#### Suggest state
+This is the same size and configuration display as Overview, but with a lot of notible differences.
+
+1. Ticker tab
+- As the user begins to type the content changes.
+- The 3 columns change to be: Suggestions, Simple quote, News & Events
+- We will need to make components for each element that shows under these columns
+- Data display will need to be responsive to the keystroke in the enhancedInput
+- We will need to make a list of tickers and mock stock data to simulate the behaviors required
+
+2. Ask tab
+- The 3 columns change to be: Suggestions, Answer, Resources
+- We will need to define use case entry terms to that the column data can update as the user types
+- Data will need to be responsive to the keystroke in the enhancedInput
+
+#### Conversation state
+This is the same configuration we have for the appl response. We need to keep this and the framework for this will work for both a Ticker and Ask response. Just that Ticker responses will be more chart graph centric and Ask will be more heavy on typography (paragraphs, lists and tables)
+
+Since most of our users are ticker searchers, we will default the tab to this.
 ---
 
 **Note:** This master plan should be updated as we learn more about customer problems and validate our hypotheses through prototyping and stakeholder feedback.
