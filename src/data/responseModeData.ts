@@ -35,7 +35,6 @@ export interface EventItem {
 export interface ResourceItem {
   title: string;
   type: 'document' | 'video';
-  icon: string;
 }
 
 // Mock ticker data (10-20 realistic tickers)
@@ -285,28 +284,23 @@ export const mockAskData: AskData[] = [
     resources: [
       {
         title: "Account Funding Guide",
-        type: "document",
-        icon: "📄"
+        type: "document"
       },
       {
         title: "Margin Trading Risks",
-        type: "document",
-        icon: "📄"
+        type: "document"
       },
       {
         title: "Video: ETFs vs Mutual Funds",
-        type: "video",
-        icon: "🎥"
+        type: "video"
       },
       {
         title: "IRA Options Trading Rules",
-        type: "document",
-        icon: "📄"
+        type: "document"
       },
       {
         title: "Tax Document Center",
-        type: "document",
-        icon: "📄"
+        type: "document"
       }
     ]
   },
@@ -327,38 +321,31 @@ export const mockAskData: AskData[] = [
     resources: [
       {
         title: "What is an RMD?",
-        type: "document",
-        icon: "📄"
+        type: "document"
       },
       {
         title: "IRS Guidance on RMDs",
-        type: "document",
-        icon: "📄"
+        type: "document"
       },
       {
         title: "RMD Frequently Asked Questions",
-        type: "document",
-        icon: "📄"
+        type: "document"
       },
       {
         title: "Video: RMD Overview",
-        type: "video",
-        icon: "🎥"
+        type: "video"
       },
       {
         title: "RMD Eligibility Check",
-        type: "document",
-        icon: "📄"
+        type: "document"
       },
       {
         title: "RMD Age Calculator",
-        type: "document",
-        icon: "📄"
+        type: "document"
       },
       {
         title: "Account Types Requiring RMDs",
-        type: "document",
-        icon: "📄"
+        type: "document"
       }
     ]
   },
@@ -379,28 +366,23 @@ export const mockAskData: AskData[] = [
     resources: [
       {
         title: "Stock Trading Guide",
-        type: "document",
-        icon: "📄"
+        type: "document"
       },
       {
         title: "Video: How to Buy Your First Stock",
-        type: "video",
-        icon: "🎥"
+        type: "video"
       },
       {
         title: "Stock Research Tools",
-        type: "document",
-        icon: "📄"
+        type: "document"
       },
       {
         title: "Order Types Explained",
-        type: "document",
-        icon: "📄"
+        type: "document"
       },
       {
         title: "Market Hours Guide",
-        type: "document",
-        icon: "📄"
+        type: "document"
       }
     ]
   }

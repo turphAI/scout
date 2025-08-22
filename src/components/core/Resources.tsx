@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { FileText, Play } from 'lucide-react';
 import { ResourceItem } from '@/data/responseModeData';
 
 interface ResourcesProps {
@@ -23,13 +24,17 @@ export default function Resources({ resources }: ResourcesProps) {
     <div className="min-h-[200px]">
       <h3 className="font-semibold text-sm mb-3">Resources</h3>
       <div className="space-y-2">
-        {resources.map((resource, index) => (
+        {resources.slice(0, 5).map((resource, index) => (
           <div
             key={index}
-            className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 cursor-pointer transition-colors"
+            className="flex items-center gap-3 p-2 bg-gray-50 rounded-lg hover:bg-gray-100 cursor-pointer transition-colors"
           >
-            <div className="text-lg">
-              {resource.icon}
+            <div className="text-gray-600">
+              {resource.type === 'video' ? (
+                <Play className="h-4 w-4" />
+              ) : (
+                <FileText className="h-4 w-4" />
+              )}
             </div>
             <div className="flex-1">
               <div className="text-sm text-gray-700">{resource.title}</div>
