@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { X, Sparkles, AudioLines, PanelRight, PanelTop } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {

@@ -23,7 +23,7 @@ export default function TestPanelClick() {
         <div className="bg-white p-6 rounded-lg shadow-md mb-8">
           <h2 className="text-xl font-semibold mb-4">Test Instructions</h2>
           <ol className="list-decimal list-inside space-y-2 text-gray-700">
-            <li>Click the "Open Panel" button below</li>
+            <li>Click the &quot;Open Panel&quot; button below</li>
             <li>Click inside the panel - it should NOT close</li>
             <li>Click outside the panel - it should close</li>
             <li>Check the browser console for click event logs</li>
@@ -40,7 +40,7 @@ export default function TestPanelClick() {
         <div className="mt-8 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
           <h3 className="font-semibold text-yellow-800 mb-2">Test Area</h3>
           <p className="text-yellow-700 text-sm">
-            This area is outside the panel. Clicking here should close the panel when it's open.
+            This area is outside the panel. Clicking here should close the panel when it&apos;s open.
           </p>
         </div>
 

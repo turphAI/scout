@@ -1,9 +1,9 @@
 'use client';
 
 import React from 'react';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { TrendingUp, TrendingDown, Clock, Building2, Users, Calendar, MapPin, Globe } from 'lucide-react';
+import { TrendingUp, TrendingDown, Building2, Users, Calendar, MapPin, Globe } from 'lucide-react';
 
 interface StockData {
   ticker: string;
