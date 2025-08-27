@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RMD Functionality Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .test-case {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 3px;
+        }
+        .pass { color: green; }
+        .fail { color: red; }
+        .info { color: blue; }
+    </style>
+</head>
+<body>
+    <h1>RMD Functionality Test</h1>
+    
+    <div class="test-section">
+        <h2>Test Instructions</h2>
+        <p>To test the RMD functionality:</p>
+        <ol>
+            <li>Go to <a href="http://localhost:3000/enhancedSS/panelV2" target="_blank">http://localhost:3000/enhancedSS/panelV2</a></li>
+            <li>Click on the search input to open the panel</li>
+            <li>Switch to "Ask" mode using the tab</li>
+            <li>Test the following inputs:</li>
+        </ol>
+    </div>
+
+    <div class="test-section">
+        <h2>Expected Behavior</h2>
+        
+        <div class="test-case">
+            <h3>1. Input Field Placeholder</h3>
+            <p class="info">✅ The input field should have NO placeholder text (empty placeholder)</p>
+        </div>
+
+        <div class="test-case">
+            <h3>2. RMD Query Matching</h3>
+            <p class="info">✅ All of these should show RMD-related suggestions:</p>
+            <ul>
+                <li>"rmd" → Should show RMD suggestions</li>
+                <li>"RMD" → Should show RMD suggestions</li>
+                <li>"required minimum distribution" → Should show RMD suggestions</li>
+                <li>"Required Minimum Distribution" → Should show RMD suggestions</li>
+                <li>"required" → Should show RMD suggestions</li>
+                <li>"Required" → Should show RMD suggestions</li>
+            </ul>
+        </div>
+
+        <div class="test-case">
+            <h3>3. Query Column Autosuggest</h3>
+            <p class="info">✅ When typing any RMD-related term, the Query column should show:</p>
+            <ul>
+                <li>"Required Minimum Distribution" (autosuggested text)</li>
+                <li>This should appear even before selecting a suggestion</li>
+            </ul>
+        </div>
+
+        <div class="test-case">
+            <h3>4. Answer Column Behavior</h3>
+            <p class="info">✅ The Answer column should:</p>
+            <ul>
+                <li>Show "Start typing to see answer suggestions..." when no query</li>
+                <li>Show the Query autosuggest when typing RMD terms</li>
+                <li>Only show the actual answer when there's a match</li>
+            </ul>
+        </div>
+
+        <div class="test-case">
+            <h3>5. RMD Conversation View</h3>
+            <p class="info">✅ When you press Enter on an RMD query, you should see:</p>
+            <ul>
+                <li>A full conversation view with RMD information</li>
+                <li>Short answer card at the top with larger font</li>
+                <li>Detailed information card below</li>
+                <li>Additional resources card with search results</li>
+                <li>Related questions card with conversation buttons</li>
+                <li>Quick actions card with calculator, guide, and tax planning</li>
+            </ul>
+        </div>
+
+        <div class="test-case">
+            <h3>5. Suggestions Column</h3>
+            <p class="info">✅ The Suggestions column should:</p>
+            <ul>
+                <li>Show "Start typing to see question suggestions..." when no input</li>
+                <li>Show RMD-related question suggestions when typing RMD terms</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test Cases to Try</h2>
+        
+        <div class="test-case">
+            <h3>RMD Terms (should all work the same)</h3>
+            <ul>
+                <li><strong>rmd</strong></li>
+                <li><strong>RMD</strong></li>
+                <li><strong>required minimum distribution</strong></li>
+                <li><strong>Required Minimum Distribution</strong></li>
+                <li><strong>required</strong></li>
+                <li><strong>Required</strong></li>
+            </ul>
+        </div>
+
+        <div class="test-case">
+            <h3>Non-RMD Terms (should not trigger RMD)</h3>
+            <ul>
+                <li><strong>apple</strong></li>
+                <li><strong>stock</strong></li>
+                <li><strong>investment</strong></li>
+                <li><strong>retirement</strong></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Manual Test Steps</h2>
+        <ol>
+            <li>Open the test page</li>
+            <li>Click the search input to focus</li>
+            <li>Switch to "Ask" mode</li>
+            <li>Type "rmd" and observe:
+                <ul>
+                    <li>Input field has no placeholder</li>
+                    <li>Query column shows "Required Minimum Distribution"</li>
+                    <li>Suggestions show RMD-related questions</li>
+                    <li>Answer column shows placeholder until selection</li>
+                </ul>
+            </li>
+            <li>Try "required" and verify same behavior</li>
+            <li>Try "apple" and verify different behavior</li>
+            <li>Type "rmd" and press Enter to see the full conversation view</li>
+            <li>Verify all cards appear: short answer, detailed info, resources, related questions, quick actions</li>
+        </ol>
+    </div>
+
+    <script>
+        // Simple client-side validation
+        console.log('RMD Test Page Loaded');
+        console.log('Please follow the manual test steps above');
+        
+        // Check if the test page is accessible
+        fetch('http://localhost:3000/enhancedSS/panelV2')
+            .then(response => {
+                if (response.ok) {
+                    console.log('✅ Test page is accessible');
+                } else {
+                    console.log('❌ Test page not accessible');
+                }
+            })
+            .catch(error => {
+                console.log('❌ Cannot access test page:', error.message);
+            });
+    </script>
+</body>
+</html>

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { X, Sparkles, AudioLines, PanelRight, PanelTop } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -13,6 +13,7 @@ import EnhancedInputV2 from './EnhancedInputV2';
 import Quote from './Quote';
 import ConversationalButtonWithIcon from './ConversationalButton';
 import StockResponse from './StockResponse';
+import RMDResponse from './RMDResponse';
 import TickerSuggestions from './TickerSuggestions';
 import SimpleQuote from './SimpleQuote';
 import NewsAndEvents from './NewsAndEvents';
@@ -22,6 +23,7 @@ import Resources from './Resources';
 import { quantumQuotes } from '@/data/quantumQuotes';
 import { getStockData } from '@/data/stockData';
 import { filterTickerData, TickerData, filterAskData, AskData } from '@/data/responseModeData';
+import { rmdConversationData } from '@/data/rmdData';
 
 interface EnhancedSmartSuggestPanelV2Props {
   isOpen: boolean;
@@ -50,6 +52,10 @@ export default function EnhancedSmartSuggestPanelV2({
   const [responseMode, setResponseMode] = useState<'ticker' | 'ask'>('ticker');
   const [inputValue, setInputValue] = useState('');
   
+  // Animation states
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [fadeIn, setFadeIn] = useState(false);
+  
   // State for ticker mode data
   const [filteredTickerData, setFilteredTickerData] = useState<TickerData[]>([]);
   const [selectedTicker, setSelectedTicker] = useState<TickerData | undefined>();
@@ -62,9 +68,21 @@ export default function EnhancedSmartSuggestPanelV2({
   // State for selected stock data
   const [selectedStockData, setSelectedStockData] = useState<ReturnType<typeof getStockData> | null>(null);
   
+  // State for RMD conversation
+  const [showRMDResponse, setShowRMDResponse] = useState(false);
+  
   // Ref for the panel element
   const panelRef = useRef<HTMLDivElement>(null);
   
+  // Animation effects
+  useEffect(() => {
+    if (isOpen) {
+      setFadeIn(true);
+    } else {
+      setFadeIn(false);
+    }
+  }, [isOpen]);
+
   // Note: Click outside detection is now handled by the backdrop overlay
   // This approach is more reliable than document event listeners
   
@@ -72,8 +90,8 @@ export default function EnhancedSmartSuggestPanelV2({
     return null;
   }
 
-  // Handle input submission
-  const handleInputSubmit = (value: string) => {
+  // Handle input submission with animation
+  const handleInputSubmit = async (value: string) => {
     const trimmedValue = value.trim();
     
     // Clear input for all searches
@@ -83,16 +101,40 @@ export default function EnhancedSmartSuggestPanelV2({
     const stockData = getStockData(trimmedValue);
     
     if (stockData) {
+      setIsTransitioning(true);
       setSelectedStockData(stockData);
       setPanelState('conversation');
+      
+      // Smooth transition delay
+      setTimeout(() => {
+        setIsTransitioning(false);
+      }, 300);
+    } else if (responseMode === 'ask') {
+      // Check if this is an RMD-related query
+      const isRMDQuery = trimmedValue.toLowerCase().includes('rmd') || 
+                        trimmedValue.toLowerCase().includes('required minimum distribution') ||
+                        trimmedValue.toLowerCase().includes('required');
+      
+      if (isRMDQuery) {
+        setIsTransitioning(true);
+        setShowRMDResponse(true);
+        setPanelState('conversation');
+        
+        // Smooth transition delay
+        setTimeout(() => {
+          setIsTransitioning(false);
+        }, 300);
+      } else {
+        // Handle other ask searches
+        console.log('Ask search submitted:', value);
+      }
     } else {
       // Handle other searches
       console.log('Search submitted:', value);
-      // You can add additional logic here for handling other searches
     }
   };
 
-  // Handle input change for reactive filtering
+  // Handle input change for reactive filtering with debouncing
   const handleInputChange = (value: string) => {
     setInputValue(value);
     setCurrentQuery(value);
@@ -122,15 +164,22 @@ export default function EnhancedSmartSuggestPanelV2({
     }
   };
 
-  // Handle back to search
-  const handleBackToSearch = () => {
+  // Handle back to search with animation
+  const handleBackToSearch = async () => {
+    setIsTransitioning(true);
     setPanelState('overview');
     setInputValue('');
     setSelectedStockData(null);
+    setShowRMDResponse(false);
+    
+    setTimeout(() => {
+      setIsTransitioning(false);
+    }, 300);
   };
 
-  // Handle mode switching
-  const handleModeSwitch = (mode: 'ticker' | 'ask') => {
+  // Handle mode switching with animation
+  const handleModeSwitch = async (mode: 'ticker' | 'ask') => {
+    setIsTransitioning(true);
     setResponseMode(mode);
     setPanelState('overview');
     setInputValue('');
@@ -139,6 +188,12 @@ export default function EnhancedSmartSuggestPanelV2({
     setSelectedTicker(undefined);
     setFilteredAskData([]);
     setSelectedAskData(undefined);
+    setSelectedStockData(null);
+    setShowRMDResponse(false);
+    
+    setTimeout(() => {
+      setIsTransitioning(false);
+    }, 300);
   };
 
   // Handle ticker suggestion click
@@ -163,8 +218,11 @@ export default function EnhancedSmartSuggestPanelV2({
       {/* Backdrop overlay for click outside detection */}
       {mode === 'overlay' && isOpen && (
         <div 
-          className="fixed inset-0 z-40"
-          style={{ backgroundColor: 'rgba(0, 0, 0, 0.15)' }}
+          className="fixed inset-0 z-40 transition-opacity duration-300"
+          style={{ 
+            backgroundColor: 'rgba(0, 0, 0, 0.15)',
+            opacity: fadeIn ? 1 : 0
+          }}
           onClick={() => {
             console.log('Backdrop clicked - closing panel');
             onClose();
@@ -176,18 +234,22 @@ export default function EnhancedSmartSuggestPanelV2({
         ref={panelRef}
         className={`${
           mode === 'overlay' 
-            ? `fixed z-50 mx-1 bg-white rounded-2xl ${
+            ? `fixed z-50 mx-1 bg-white rounded-2xl transition-all duration-300 ${
                 isRightPanel 
                   ? 'top-0 right-0 bottom-0 w-96' 
                   : 'top-12 left-0 right-0 max-h-[calc(100vh-6rem)]'
               }`
-            : `w-full h-full bg-white ${
+            : `w-full h-full bg-white transition-all duration-300 ${
                 isRightPanel 
                   ? 'lg:w-96' 
                   : 'w-full'
               }`
         }`}
-        style={mode === 'overlay' ? { border: '1px solid #cf89e1' } : {}}
+        style={{
+          border: mode === 'overlay' ? '1px solid #cf89e1' : undefined,
+          opacity: fadeIn ? 1 : 0,
+          transform: fadeIn ? 'translateY(0)' : 'translateY(10px)'
+        }}
       >
       {/* Content container - height matches content with bottom padding for fixed input */}
       <div className="w-full h-full px-6 py-8 pb-40 overflow-y-auto relative">
@@ -211,7 +273,7 @@ export default function EnhancedSmartSuggestPanelV2({
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="h-8 w-8 p-0 hover:bg-gray-100"
+                    className="h-8 w-8 p-0 hover:bg-gray-100 transition-colors"
                   >
                     <AudioLines className="h-4 w-4 text-gray-600" />
                   </Button>
@@ -224,7 +286,7 @@ export default function EnhancedSmartSuggestPanelV2({
               <Button
                 variant="ghost"
                 size="sm"
-                className="h-8 w-8 p-0 hover:bg-gray-100"
+                className="h-8 w-8 p-0 hover:bg-gray-100 transition-colors"
                 onClick={() => {
                   if (mode === 'overlay') {
                     onModeChange?.('sidecar');
@@ -246,7 +308,7 @@ export default function EnhancedSmartSuggestPanelV2({
                     variant="outline"
                     size="sm"
                     onClick={onClose}
-                    className="h-8 w-8 p-0 rounded-full border-gray-300 hover:bg-gray-50"
+                    className="h-8 w-8 p-0 rounded-full border-gray-300 hover:bg-gray-50 transition-colors"
                   >
                     <X className="h-4 w-4" />
                   </Button>
@@ -259,128 +321,134 @@ export default function EnhancedSmartSuggestPanelV2({
           </TooltipProvider>
         </div>
 
-        {/* Content sections - conditional rendering */}
-        {panelState === 'conversation' ? (
-          <div className="space-y-4">
-            {/* Back button */}
-            <div className="flex items-center gap-2 mb-4">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleBackToSearch}
-                className="text-gray-600 hover:text-gray-900"
-              >
-                ← Back to search
-              </Button>
+        {/* Content sections - conditional rendering with animations */}
+        <div className={`transition-all duration-300 ${isTransitioning ? 'opacity-50' : 'opacity-100'}`}>
+          {panelState === 'conversation' ? (
+            <div className="space-y-4 animate-in slide-in-from-bottom-4 duration-300">
+              {/* Back button */}
+              <div className="flex items-center gap-2 mb-4">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleBackToSearch}
+                  className="text-gray-600 hover:text-gray-900 transition-colors"
+                >
+                  ← Back to search
+                </Button>
+              </div>
+              
+              {/* Stock Response or RMD Response */}
+              <div className="overflow-y-auto max-h-[calc(100vh-300px)]">
+                {selectedStockData && (
+                  <StockResponse
+                    stockData={selectedStockData.stockData}
+                    newsItems={selectedStockData.newsItems}
+                    relatedStocks={selectedStockData.relatedStocks}
+                    companyDescription={selectedStockData.companyDescription}
+                  />
+                )}
+                {showRMDResponse && (
+                  <RMDResponse rmdData={rmdConversationData} />
+                )}
+              </div>
             </div>
-            
-            {/* Stock Response */}
-            <div className="overflow-y-auto max-h-[calc(100vh-300px)]">
-              {selectedStockData && (
-                <StockResponse
-                  stockData={selectedStockData.stockData}
-                  newsItems={selectedStockData.newsItems}
-                  relatedStocks={selectedStockData.relatedStocks}
-                  companyDescription={selectedStockData.companyDescription}
-                />
+          ) : panelState === 'suggest' ? (
+            <div className={`${mode === 'sidecar' ? 'space-y-8' : 'grid grid-cols-1 lg:grid-cols-3 gap-8'} animate-in slide-in-from-bottom-4 duration-300`}>
+              {responseMode === 'ticker' ? (
+                <>
+                  <div className="overflow-y-auto max-h-[calc(100vh-300px)]">
+                    <TickerSuggestions 
+                      suggestions={filteredTickerData}
+                      onSuggestionClick={handleTickerSuggestionClick}
+                    />
+                  </div>
+                  <div className="overflow-y-auto max-h-[calc(100vh-300px)]">
+                    <SimpleQuote ticker={selectedTicker} />
+                  </div>
+                  <div className="overflow-y-auto max-h-[calc(100vh-300px)]">
+                    <NewsAndEvents ticker={selectedTicker} />
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="overflow-y-auto max-h-[calc(100vh-300px)]">
+                    <AskSuggestions 
+                      suggestions={selectedAskData?.suggestions || filteredAskData.flatMap(data => data.suggestions)}
+                      onSuggestionClick={handleAskSuggestionClick}
+                    />
+                  </div>
+                  <div className="overflow-y-auto max-h-[calc(100vh-300px)]">
+                    <AnswerDisplay 
+                      answer={selectedAskData?.answer}
+                      query={currentQuery}
+                    />
+                  </div>
+                  <div className="overflow-y-auto max-h-[calc(100vh-300px)]">
+                    <Resources 
+                      resources={selectedAskData?.resources || []}
+                    />
+                  </div>
+                </>
               )}
             </div>
-          </div>
-        ) : panelState === 'suggest' ? (
-          <div className={mode === 'sidecar' ? 'space-y-8' : 'grid grid-cols-1 lg:grid-cols-3 gap-8'}>
-            {responseMode === 'ticker' ? (
-              <>
-                <div className="overflow-y-auto max-h-[calc(100vh-300px)]">
-                  <TickerSuggestions 
-                    suggestions={filteredTickerData}
-                    onSuggestionClick={handleTickerSuggestionClick}
-                  />
+          ) : (
+            <div className={`${mode === 'sidecar' ? 'space-y-8' : 'grid grid-cols-1 lg:grid-cols-3 gap-8'} animate-in slide-in-from-bottom-4 duration-300`}>
+              {/* Recent quotes section */}
+              <div className="animate-in slide-in-from-left-4 duration-300 delay-100">
+                <h3 className="font-semibold text-sm mb-3">Recent quotes</h3>
+                <div className="space-y-2">
+                  {quantumQuotes.slice(0, 3).map((quote, index) => (
+                    <div key={index} className="animate-in slide-in-from-left-4 duration-300" style={{ animationDelay: `${(index + 1) * 100}ms` }}>
+                      <Quote
+                        ticker={quote.ticker}
+                        companyName={quote.companyName}
+                        percentageChange={quote.percentageChange}
+                        sharePrice={quote.sharePrice}
+                      />
+                    </div>
+                  ))}
                 </div>
-                <div className="overflow-y-auto max-h-[calc(100vh-300px)]">
-                  <SimpleQuote ticker={selectedTicker} />
-                </div>
-                <div className="overflow-y-auto max-h-[calc(100vh-300px)]">
-                  <NewsAndEvents ticker={selectedTicker} />
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="overflow-y-auto max-h-[calc(100vh-300px)]">
-                  <AskSuggestions 
-                    suggestions={selectedAskData?.suggestions || filteredAskData.flatMap(data => data.suggestions)}
-                    onSuggestionClick={handleAskSuggestionClick}
-                  />
-                </div>
-                <div className="overflow-y-auto max-h-[calc(100vh-300px)]">
-                  <AnswerDisplay 
-                    answer={selectedAskData?.answer}
-                    query={currentQuery}
-                  />
-                </div>
-                <div className="overflow-y-auto max-h-[calc(100vh-300px)]">
-                  <Resources 
-                    resources={selectedAskData?.resources || []}
-                  />
-                </div>
-              </>
-            )}
-          </div>
-        ) : (
-          <div className={mode === 'sidecar' ? 'space-y-8' : 'grid grid-cols-1 lg:grid-cols-3 gap-8'}>
-            {/* Recent quotes section */}
-            <div>
-              <h3 className="font-semibold text-sm mb-3">Recent quotes</h3>
-              <div className="space-y-2">
-                {quantumQuotes.slice(0, 3).map((quote, index) => (
-                  <Quote
-                    key={index}
-                    ticker={quote.ticker}
-                    companyName={quote.companyName}
-                    percentageChange={quote.percentageChange}
-                    sharePrice={quote.sharePrice}
-                  />
-                ))}
               </div>
-            </div>
 
-            {/* Past discussions section */}
-            <div>
-              <h3 className="font-semibold text-sm mb-3">Past discussions</h3>
-              <div className="space-y-2">
-                <ConversationalButtonWithIcon>How do I fund my new account?</ConversationalButtonWithIcon>
-                <ConversationalButtonWithIcon>What are the risks of margin trading?</ConversationalButtonWithIcon>
-                <ConversationalButtonWithIcon>Compare ETFs vs mutual funds</ConversationalButtonWithIcon>
-                <ConversationalButtonWithIcon>Can I trade options in my IRA?</ConversationalButtonWithIcon>
-                <ConversationalButtonWithIcon>Where can I find tax documents?</ConversationalButtonWithIcon>
+              {/* Past discussions section */}
+              <div className="animate-in slide-in-from-left-4 duration-300 delay-200">
+                <h3 className="font-semibold text-sm mb-3">Past discussions</h3>
+                <div className="space-y-2">
+                  <ConversationalButtonWithIcon>How do I fund my new account?</ConversationalButtonWithIcon>
+                  <ConversationalButtonWithIcon>What are the risks of margin trading?</ConversationalButtonWithIcon>
+                  <ConversationalButtonWithIcon>Compare ETFs vs mutual funds</ConversationalButtonWithIcon>
+                  <ConversationalButtonWithIcon>Can I trade options in my IRA?</ConversationalButtonWithIcon>
+                  <ConversationalButtonWithIcon>Where can I find tax documents?</ConversationalButtonWithIcon>
+                </div>
               </div>
-            </div>
 
-            {/* Your day section */}
-            <div>
-              <h3 className="font-semibold text-sm mb-3">Your day</h3>
-              
-              {/* Short content slot */}
-              <div className="mb-3 p-3 bg-gray-50 rounded-lg">
-                <p className="text-sm text-gray-700">
-                  It appears to be a mixed day for the markets, with several factors influencing different sectors.
-                </p>
-              </div>
-              
-              {/* Tighter alerts */}
-              <div className="space-y-1">
-                <div className="flex items-center justify-between py-2 px-3 bg-blue-50 rounded-lg">
-                  <span className="text-sm font-medium text-blue-900">Assistant tips</span>
-                  <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full">2</span>
+              {/* Your day section */}
+              <div className="animate-in slide-in-from-left-4 duration-300 delay-300">
+                <h3 className="font-semibold text-sm mb-3">Your day</h3>
+                
+                {/* Short content slot */}
+                <div className="mb-3 p-3 bg-gray-50 rounded-lg">
+                  <p className="text-sm text-gray-700">
+                    It appears to be a mixed day for the markets, with several factors influencing different sectors.
+                  </p>
                 </div>
                 
-                <div className="flex items-center justify-between py-2 px-3 bg-orange-50 rounded-lg">
-                  <span className="text-sm font-medium text-orange-900">Portfolio insights</span>
-                  <span className="bg-orange-500 text-white text-xs px-2 py-1 rounded-full">5</span>
+                {/* Tighter alerts */}
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between py-2 px-3 bg-blue-50 rounded-lg">
+                    <span className="text-sm font-medium text-blue-900">Assistant tips</span>
+                    <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full">2</span>
+                  </div>
+                  
+                  <div className="flex items-center justify-between py-2 px-3 bg-orange-50 rounded-lg">
+                    <span className="text-sm font-medium text-orange-900">Portfolio insights</span>
+                    <span className="bg-orange-500 text-white text-xs px-2 py-1 rounded-full">5</span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
       
       {/* Fixed EnhancedInputV2 at bottom */}
