@@ -2,11 +2,10 @@
 
 import React from 'react';
 import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { FileText, Play, Calculator, BookOpen, ExternalLink } from 'lucide-react';
 import ConversationalButtonWithIcon from './ConversationalButton';
-import { RMDConversationData, RMDResource, RMDRelatedQuestion } from '@/data/rmdData';
+import { RMDConversationData, RMDResource } from '@/data/rmdData';
 
 interface RMDResponseProps {
   rmdData: RMDConversationData;
@@ -39,22 +38,7 @@ export default function RMDResponse({ rmdData }: RMDResponseProps) {
     }
   };
 
-  const getCategoryColor = (category: RMDRelatedQuestion['category']) => {
-    switch (category) {
-      case 'calculation':
-        return 'bg-blue-50 text-blue-700 border-blue-200';
-      case 'timing':
-        return 'bg-green-50 text-green-700 border-green-200';
-      case 'penalties':
-        return 'bg-red-50 text-red-700 border-red-200';
-      case 'taxes':
-        return 'bg-purple-50 text-purple-700 border-purple-200';
-      case 'planning':
-        return 'bg-orange-50 text-orange-700 border-orange-200';
-      default:
-        return 'bg-gray-50 text-gray-700 border-gray-200';
-    }
-  };
+
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
