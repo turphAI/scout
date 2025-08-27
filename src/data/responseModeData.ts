@@ -280,7 +280,7 @@ export const mockAskData: AskData[] = [
       "How to read stock charts",
       "What are dividend payments?"
     ],
-    answer: "This is where the answer will display. Based on the user typing and when we get to 10 characters. Before that we only show a placeholder note.",
+    answer: "",
     resources: [
       {
         title: "Account Funding Guide",
@@ -423,9 +423,34 @@ export const filterTickerData = (query: string): TickerData[] => {
 
 export const filterAskData = (query: string): AskData[] => {
   const lowercaseQuery = query.toLowerCase();
-  return mockAskData.filter(askData => 
-    askData.suggestions.some(suggestion => 
+  
+  // Special handling for RMD queries
+  const isRmdQuery = lowercaseQuery.includes('rmd') || 
+                     lowercaseQuery.includes('required minimum distribution') ||
+                     lowercaseQuery.includes('required');
+  
+  return mockAskData.filter(askData => {
+    // For RMD-related queries, return the RMD data
+    if (isRmdQuery && askData.suggestions.some(s => s.toLowerCase().includes('rmd'))) {
+      return true;
+    }
+    
+    // For other queries, use normal filtering
+    return askData.suggestions.some(suggestion => 
       suggestion.toLowerCase().includes(lowercaseQuery)
-    )
-  );
+    );
+  });
+};
+
+// Helper function to get autosuggest text for RMD queries
+export const getRmdAutosuggest = (query: string): string | null => {
+  const lowercaseQuery = query.toLowerCase();
+  
+  if (lowercaseQuery.includes('rmd') || 
+      lowercaseQuery.includes('required minimum distribution') ||
+      lowercaseQuery.includes('required')) {
+    return 'Required Minimum Distribution';
+  }
+  
+  return null;
 };
