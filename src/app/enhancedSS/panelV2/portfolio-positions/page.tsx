@@ -6,6 +6,8 @@ import Header from '@/components/core/Header';
 import { AccountSidebar, mockAccountGroups, Account } from '@/components/core/AccountSidebar';
 import PortfolioTabs from '@/components/core/PortfolioTabs';
 import ScoutGhostButton from '@/components/core/ScoutGhostButton';
+import PortfolioPositionsTable from '@/components/core/PortfolioPositionsTable';
+import { enhancedPortfolioPositionsData } from '@/data/portfolioPositionsData';
 
 export default function PortfolioPositionsPage() {
   const router = useRouter();
@@ -62,9 +64,16 @@ export default function PortfolioPositionsPage() {
           
           <PortfolioTabs />
           
-          {/* Content will be added here as we progress */}
-          <div className="text-gray-600 mt-6">
-            Portfolio positions content will be developed here.
+          {/* Portfolio Positions Tables */}
+          <div className="space-y-8 mt-6">
+            {enhancedPortfolioPositionsData.map((account) => (
+              <PortfolioPositionsTable
+                key={account.acctNum}
+                positions={account.enhancedPositionDetails || []}
+                accountName={account.accountName}
+                accountNumber={account.acctNum}
+              />
+            ))}
           </div>
         </div>
       </div>
