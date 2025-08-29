@@ -418,7 +418,7 @@ export default function EnhancedSmartSuggestPanelV2({
                     <h3 className="font-semibold text-sm mb-3">Portfolio Insights</h3>
                     <div className="space-y-2">
                       <ConversationalButtonWithIcon>How is my portfolio performing vs the market?</ConversationalButtonWithIcon>
-                      <ConversationalButtonWithIcon>What's driving today's gains?</ConversationalButtonWithIcon>
+                      <ConversationalButtonWithIcon>What&apos;s driving today&apos;s gains?</ConversationalButtonWithIcon>
                       <ConversationalButtonWithIcon>Should I rebalance my portfolio?</ConversationalButtonWithIcon>
                       <ConversationalButtonWithIcon>What are my top performing holdings?</ConversationalButtonWithIcon>
                       <ConversationalButtonWithIcon>How can I improve my diversification?</ConversationalButtonWithIcon>
@@ -467,10 +467,10 @@ export default function EnhancedSmartSuggestPanelV2({
                     <h3 className="font-semibold text-sm mb-3">Position Insights</h3>
                     <div className="space-y-2">
                       <ConversationalButtonWithIcon>Which positions should I consider selling?</ConversationalButtonWithIcon>
-                      <ConversationalButtonWithIcon>What's the outlook for my tech holdings?</ConversationalButtonWithIcon>
+                      <ConversationalButtonWithIcon>What&apos;s the outlook for my tech holdings?</ConversationalButtonWithIcon>
                       <ConversationalButtonWithIcon>Should I add to my QQQ position?</ConversationalButtonWithIcon>
                       <ConversationalButtonWithIcon>How are my individual stocks performing?</ConversationalButtonWithIcon>
-                      <ConversationalButtonWithIcon>What's my cost basis vs current prices?</ConversationalButtonWithIcon>
+                      <ConversationalButtonWithIcon>What&apos;s my cost basis vs current prices?</ConversationalButtonWithIcon>
                     </div>
                   </div>
 

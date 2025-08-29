@@ -18,7 +18,6 @@ export default function PortfolioSummaryPage() {
   // Enhanced panel state
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
   const [isSidecarOpen, setIsSidecarOpen] = useState(false);
-  const [panelMode, setPanelMode] = useState<'overlay' | 'sidecar'>('overlay');
 
   const handleNavSelect = (navKey: string) => {
     switch (navKey) {
@@ -40,17 +39,14 @@ export default function PortfolioSummaryPage() {
   // Enhanced panel handlers
   const handleScoutAssistantClick = () => {
     setIsOverlayOpen(true);
-    setPanelMode('overlay');
   };
 
   const handlePanelClose = () => {
     setIsOverlayOpen(false);
     setIsSidecarOpen(false);
-    setPanelMode('overlay');
   };
 
   const handlePanelModeChange = (mode: 'overlay' | 'sidecar') => {
-    setPanelMode(mode);
     if (mode === 'sidecar') {
       setIsOverlayOpen(false);
       setIsSidecarOpen(true);

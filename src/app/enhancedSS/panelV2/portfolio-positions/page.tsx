@@ -17,11 +17,8 @@ export default function PortfolioPositionsPage() {
   // Enhanced panel state
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
   const [isSidecarOpen, setIsSidecarOpen] = useState(false);
-  const [panelMode, setPanelMode] = useState<'overlay' | 'sidecar'>('overlay');
 
   const handleNavSelect = (navKey: string) => {
-    console.log('Navigation selected:', navKey);
-    
     switch (navKey) {
       case 'portfolio-summary':
         router.push('/enhancedSS/panelV2/portfolio-summary');
@@ -36,25 +33,19 @@ export default function PortfolioPositionsPage() {
 
   const handleAccountSelect = (account: Account) => {
     setSelectedAccount(account);
-    console.log('Selected account:', account);
   };
 
   // Enhanced panel handlers
   const handleScoutAssistantClick = () => {
-    console.log('Scout Assistant clicked - opening enhanced panel');
     setIsOverlayOpen(true);
-    setPanelMode('overlay');
   };
 
   const handlePanelClose = () => {
-    console.log('Panel close called');
     setIsOverlayOpen(false);
     setIsSidecarOpen(false);
-    setPanelMode('overlay');
   };
 
   const handlePanelModeChange = (mode: 'overlay' | 'sidecar') => {
-    setPanelMode(mode);
     if (mode === 'sidecar') {
       setIsOverlayOpen(false);
       setIsSidecarOpen(true);
