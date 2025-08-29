@@ -1,17 +1,18 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Briefcase, User } from 'lucide-react';
+import { Briefcase, User, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import HeaderInput from './HeaderInput';
 import EnhancedSmartSuggestPanelV2 from './EnhancedSmartSuggestPanelV2';
 import LogoutDropdown from './LogoutDropdown';
+
 import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from '@/components/ui/navigation-menu';
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import Link from 'next/link';
 
 export type HeaderProps = {
@@ -71,30 +72,40 @@ export default function Header({
       {/* Bottom row: navigation (only for full variant) */}
       {variant === 'full' && (
         <div className="flex items-center justify-between px-4 py-2 border-t border-gray-100">
-          <NavigationMenu>
-            <NavigationMenuList>
-              <NavigationMenuItem>
-                <NavigationMenuTrigger onClick={() => onNavSelect?.('accounts')}>
+          <div className="flex items-center gap-4">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="flex items-center gap-1">
                   Accounts
-                </NavigationMenuTrigger>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuTrigger onClick={() => onNavSelect?.('planning')}>
-                  Planning
-                </NavigationMenuTrigger>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuTrigger onClick={() => onNavSelect?.('research')}>
-                  Research
-                </NavigationMenuTrigger>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuTrigger onClick={() => onNavSelect?.('products')}>
-                  Products & Services
-                </NavigationMenuTrigger>
-              </NavigationMenuItem>
-            </NavigationMenuList>
-          </NavigationMenu>
+                  <ChevronDown className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+                                <DropdownMenuContent align="start" className="w-48">
+                    <DropdownMenuItem onClick={() => {
+                      console.log('Portfolio Summary clicked');
+                      window.location.href = '/enhancedSS/panelV2/portfolio-summary';
+                    }}>
+                      Portfolio Summary
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => {
+                      console.log('Portfolio Positions clicked');
+                      window.location.href = '/enhancedSS/panelV2/portfolio-positions';
+                    }}>
+                      Portfolio Positions
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+            </DropdownMenu>
+            
+            <Button variant="ghost" onClick={() => onNavSelect?.('planning')}>
+              Planning
+            </Button>
+            <Button variant="ghost" onClick={() => onNavSelect?.('research')}>
+              Research
+            </Button>
+            <Button variant="ghost" onClick={() => onNavSelect?.('products')}>
+              Products & Services
+            </Button>
+          </div>
           
           <div className="flex items-center gap-2">
             <HeaderInput onSmartSuggestOpen={handleSmartSuggestOpen} />

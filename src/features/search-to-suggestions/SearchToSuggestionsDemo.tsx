@@ -7,7 +7,7 @@ import PageWithSidecar from "@/components/core/PageWithSidecar"
 export function SearchToSuggestionsDemo() {
   return (
     <PageWithSidecar showSidecar={false} sidecarMode="overlay">
-      <div className="min-h-screen bg-background p-8">
+      <div className="bg-background p-8">
         <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Header from './Header';
 
 interface LayoutProps {
@@ -16,6 +16,7 @@ interface LayoutProps {
 
 export default function Layout({ children, variant = 'home', className = '', showOverlayPanel = true, isOverlayOpen, onOverlayClose, onSmartSuggestOpen }: LayoutProps) {
   const pathname = usePathname();
+  const router = useRouter();
   
   // Map our layout variants to header variants
   const headerVariant = variant === 'home' ? 'full' : 'short';
@@ -50,7 +51,20 @@ export default function Layout({ children, variant = 'home', className = '', sho
         <Header 
           variant={headerVariant}
           onLogout={() => console.log('Logout clicked')}
-          onNavSelect={(navKey) => console.log('Nav selected:', navKey)}
+          onNavSelect={(navKey) => {
+            console.log('Nav selected:', navKey);
+            
+            switch (navKey) {
+              case 'portfolio-summary':
+                router.push('/portfolio-summary');
+                break;
+              case 'portfolio-positions':
+                router.push('/portfolio-positions');
+                break;
+              default:
+                console.log('Navigation not implemented for:', navKey);
+            }
+          }}
           onSmartSuggestOpen={onSmartSuggestOpen}
           homeHref={getFeatureHomepage()}
           showOverlayPanel={showOverlayPanel}

@@ -4,11 +4,13 @@ import React, { useState } from 'react';
 import Layout from '@/components/core/Layout';
 import PageWithSidecar from '@/components/core/PageWithSidecar';
 import EnhancedSmartSuggestPanel from '@/components/core/EnhancedSmartSuggestPanel';
+import { AccountSidebar, mockAccountGroups, Account } from '@/components/core/AccountSidebar';
 
 export default function HomePage() {
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
   const [isSidecarOpen, setIsSidecarOpen] = useState(false);
   const [panelMode, setPanelMode] = useState<'overlay' | 'sidecar'>('overlay');
+  const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
 
   const handleOverlayClose = () => {
     setIsOverlayOpen(false);
@@ -38,8 +40,20 @@ export default function HomePage() {
     }
   };
 
+  const handleAccountSelect = (account: Account) => {
+    setSelectedAccount(account);
+    console.log('Selected account:', account);
+  };
+
   return (
     <div className="min-h-screen w-screen flex" style={{ width: '100vw', background: '#f9f7f5' }}>
+      {/* Account Sidebar */}
+      <AccountSidebar
+        accountGroups={mockAccountGroups}
+        onAccountSelect={handleAccountSelect}
+        selectedAccountId={selectedAccount?.id}
+      />
+      
       <div className="flex-1">
         <Layout 
           variant="home" 

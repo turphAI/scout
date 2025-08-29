@@ -14,6 +14,10 @@ export default function SimpleQuote({ ticker }: SimpleQuoteProps) {
     return (
       <div className="min-h-[200px] animate-in fade-in duration-300">
         <h3 className="font-semibold text-sm mb-3">Simple quote</h3>
+        <div className="text-sm text-gray-500 flex items-center gap-2">
+          <div className="w-2 h-2 bg-gray-300 rounded-full animate-pulse"></div>
+          Select a ticker to see quote details...
+        </div>
       </div>
     );
   }

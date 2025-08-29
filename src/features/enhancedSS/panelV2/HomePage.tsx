@@ -5,10 +5,12 @@ import Layout from '@/components/core/Layout';
 import PageWithSidecar from '@/components/core/PageWithSidecar';
 import EnhancedSmartSuggestPanelV2 from '@/components/core/EnhancedSmartSuggestPanelV2';
 
+
 export default function HomePage() {
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
   const [isSidecarOpen, setIsSidecarOpen] = useState(false);
   const [panelMode, setPanelMode] = useState<'overlay' | 'sidecar'>('overlay');
+
 
   console.log('Panel state:', { isOverlayOpen, isSidecarOpen, panelMode });
 
@@ -42,6 +44,8 @@ export default function HomePage() {
       setIsSidecarOpen(false);
     }
   };
+
+
 
   return (
     <div className="min-h-screen w-screen flex" style={{ width: '100vw', background: '#f9f7f5' }}>

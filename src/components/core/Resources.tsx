@@ -13,6 +13,10 @@ export default function Resources({ resources }: ResourcesProps) {
     return (
       <div className="min-h-[200px] animate-in fade-in duration-300">
         <h3 className="font-semibold text-sm mb-3">Resources</h3>
+        <div className="text-sm text-gray-500 flex items-center gap-2">
+          <div className="w-2 h-2 bg-gray-300 rounded-full animate-pulse"></div>
+          Related resources will appear here...
+        </div>
       </div>
     );
   }

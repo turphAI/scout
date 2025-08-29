@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ChevronDown, Home, BarChart3, MessageSquare } from 'lucide-react';
+import { ChevronDown, Home, BarChart3, MessageSquare, PieChart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -18,6 +18,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import PortfolioDialog from './PortfolioDialog';
 
 interface LogoutDropdownProps {
   onLogout?: () => void;
@@ -62,6 +63,7 @@ export default function LogoutDropdown({ onLogout }: LogoutDropdownProps) {
   const router = useRouter();
   const [isTickerDialogOpen, setIsTickerDialogOpen] = useState(false);
   const [isAskDialogOpen, setIsAskDialogOpen] = useState(false);
+  const [isPortfolioDialogOpen, setIsPortfolioDialogOpen] = useState(false);
   const [tickerDialogTab, setTickerDialogTab] = useState<string>('list');
 
   const handleVariantDashboard = () => {
@@ -75,6 +77,10 @@ export default function LogoutDropdown({ onLogout }: LogoutDropdownProps) {
 
   const handleAskList = () => {
     setIsAskDialogOpen(true);
+  };
+
+  const handlePortfolio = () => {
+    setIsPortfolioDialogOpen(true);
   };
 
   const handleTickerConversationView = () => {
@@ -95,6 +101,13 @@ export default function LogoutDropdown({ onLogout }: LogoutDropdownProps) {
           <DropdownMenuItem onClick={handleVariantDashboard} className="flex items-center gap-2">
             <Home className="h-4 w-4" />
             Variant dashboard
+          </DropdownMenuItem>
+          
+          <DropdownMenuSeparator />
+          
+          <DropdownMenuItem onClick={handlePortfolio} className="flex items-center gap-2">
+            <PieChart className="h-4 w-4" />
+            Portfolio
           </DropdownMenuItem>
           
           <DropdownMenuSeparator />
@@ -212,6 +225,12 @@ export default function LogoutDropdown({ onLogout }: LogoutDropdownProps) {
           </Tabs>
         </DialogContent>
       </Dialog>
+
+      {/* Portfolio Dialog */}
+      <PortfolioDialog 
+        open={isPortfolioDialogOpen} 
+        onOpenChange={setIsPortfolioDialogOpen} 
+      />
     </>
   );
 }

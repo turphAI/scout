@@ -1,17 +1,15 @@
-// RMD (Required Minimum Distribution) conversation data
-
 export interface RMDResource {
+  type: 'video' | 'calculator' | 'guide' | 'document';
   title: string;
   description: string;
-  url: string;
-  type: 'article' | 'calculator' | 'guide' | 'video';
   source: string;
   readTime?: string;
+  url?: string;
 }
 
 export interface RMDRelatedQuestion {
   question: string;
-  category: 'calculation' | 'timing' | 'penalties' | 'taxes' | 'planning';
+  answer?: string;
 }
 
 export interface RMDConversationData {
@@ -22,105 +20,92 @@ export interface RMDConversationData {
 }
 
 export const rmdConversationData: RMDConversationData = {
-  shortAnswer: "Required Minimum Distributions (RMDs) are minimum amounts that retirement plan account owners must withdraw annually starting with the year they reach age 73 (or 72 if you reach age 72 before January 1, 2023).",
+  shortAnswer: "Required Minimum Distribution (RMD) is the minimum amount you must withdraw from your traditional IRA or 401(k) each year starting at age 73 (or 72 if you turned 72 before 2023). The amount is calculated based on your account balance and life expectancy.",
   
-  detailedAnswer: `Required Minimum Distributions (RMDs) are minimum amounts that retirement plan account owners must withdraw annually starting with the year they reach age 73 (or 72 if you reach age 72 before January 1, 2023). RMDs apply to traditional IRAs, SEP IRAs, SIMPLE IRAs, and employer-sponsored retirement plans like 401(k)s.
+  detailedAnswer: `Required Minimum Distributions (RMDs) are mandatory withdrawals from tax-deferred retirement accounts that must begin by April 1st of the year following the year you turn 73 (or 72 if you turned 72 before 2023).
 
-The purpose of RMDs is to ensure that retirement accounts are used for retirement income rather than being passed on as tax-advantaged inheritances. The IRS requires these distributions to begin at a certain age to ensure that the government eventually collects taxes on the pre-tax contributions and earnings.
+Key Points:
+• RMDs apply to traditional IRAs, 401(k)s, 403(b)s, and other qualified retirement plans
+• The first RMD can be delayed until April 1st of the year after you turn 73
+• Subsequent RMDs must be taken by December 31st each year
+• The distribution amount is calculated using IRS life expectancy tables
+• RMDs are subject to ordinary income tax rates
+• Failure to take RMDs results in a 50% penalty on the shortfall
 
-Key points about RMDs:
+Calculation Method:
+Your RMD is calculated by dividing your account balance as of December 31st of the previous year by your life expectancy factor from the IRS Uniform Lifetime Table. For example, if you're 75 with a $100,000 IRA balance, your RMD would be approximately $4,065.
 
-• **Age Requirements**: You must begin taking RMDs by April 1 of the year following the year you turn 73 (or 72 if you reached that age before 2023)
-• **Calculation Method**: RMD amounts are calculated by dividing your account balance by a life expectancy factor from IRS tables
-• **Penalties**: Failing to take RMDs results in a 50% excise tax on the amount that should have been withdrawn
-• **Tax Implications**: RMDs are generally taxable as ordinary income
-• **Roth IRAs**: Roth IRAs do not require RMDs during the original owner's lifetime
+Tax Implications:
+RMDs are treated as ordinary income and must be reported on your tax return. They can affect your tax bracket, Social Security benefits taxation, and Medicare premiums. Strategic planning can help minimize the tax impact.
 
-The amount of your RMD depends on your age, account balance, and life expectancy. The IRS provides tables to help calculate the required distribution amount. Many financial institutions and online calculators can help you determine your specific RMD amount.`,
+Exceptions:
+• Roth IRAs don't require RMDs during the owner's lifetime
+• Inherited IRAs have different RMD rules
+• Qualified charitable distributions (QCDs) can satisfy RMD requirements while avoiding taxes`,
 
   resources: [
     {
-      title: "IRS RMD Frequently Asked Questions",
-      description: "Official IRS guidance on Required Minimum Distributions including calculation methods, deadlines, and penalties.",
-      url: "https://www.irs.gov/retirement-plans/retirement-plans-faqs-regarding-required-minimum-distributions",
-      type: "guide",
-      source: "Internal Revenue Service",
-      readTime: "5 min read"
+      type: 'calculator',
+      title: 'RMD Calculator',
+      description: 'Calculate your required minimum distribution amount based on your age and account balance.',
+      source: 'IRS.gov',
+      readTime: '2 min'
     },
     {
-      title: "RMD Calculator Tool",
-      description: "Interactive calculator to determine your required minimum distribution amount based on your age and account balance.",
-      url: "https://www.fidelity.com/calculators-tools/rmd-calculator",
-      type: "calculator",
-      source: "Fidelity Investments",
-      readTime: "2 min read"
+      type: 'guide',
+      title: 'Complete RMD Guide',
+      description: 'Comprehensive guide covering all aspects of required minimum distributions.',
+      source: 'Financial Planning Association',
+      readTime: '15 min'
     },
     {
-      title: "Understanding RMD Age Changes",
-      description: "Comprehensive guide to the SECURE Act changes that moved the RMD age from 70½ to 72, and SECURE 2.0 changes to age 73.",
-      url: "https://www.investopedia.com/rmd-age-changes-2023-5115123",
-      type: "article",
-      source: "Investopedia",
-      readTime: "8 min read"
+      type: 'video',
+      title: 'Understanding RMDs',
+      description: 'Video explanation of how RMDs work and strategies for managing them.',
+      source: 'Investment Education',
+      readTime: '8 min'
     },
     {
-      title: "RMD Penalties and How to Avoid Them",
-      description: "Learn about the 50% penalty for missed RMDs and strategies to avoid or reduce penalties.",
-      url: "https://www.kiplinger.com/retirement/rmd-penalties",
-      type: "article",
-      source: "Kiplinger",
-      readTime: "6 min read"
+      type: 'document',
+      title: 'IRS Publication 590-B',
+      description: 'Official IRS publication covering distributions from individual retirement arrangements.',
+      source: 'Internal Revenue Service',
+      readTime: '45 min'
     },
     {
-      title: "RMD Planning Strategies",
-      description: "Advanced strategies for managing RMDs including charitable giving, Roth conversions, and tax planning.",
-      url: "https://www.morningstar.com/retirement/rmd-strategies",
-      type: "guide",
-      source: "Morningstar",
-      readTime: "10 min read"
+      type: 'guide',
+      title: 'RMD Tax Planning Strategies',
+      description: 'Learn strategies to minimize the tax impact of your required minimum distributions.',
+      source: 'Tax Planning Institute',
+      readTime: '12 min'
     },
     {
-      title: "Video: RMD Basics Explained",
-      description: "Clear explanation of Required Minimum Distributions with examples and visual aids.",
-      url: "https://www.youtube.com/watch?v=rmd-basics",
-      type: "video",
-      source: "Financial Education Channel",
-      readTime: "12 min watch"
+      type: 'calculator',
+      title: 'RMD vs. QCD Calculator',
+      description: 'Compare the tax impact of taking RMDs versus making qualified charitable distributions.',
+      source: 'Charitable Planning Tools',
+      readTime: '5 min'
     }
   ],
 
   relatedQuestions: [
     {
-      question: "How do I calculate my RMD amount?",
-      category: "calculation"
+      question: "What happens if I don't take my RMD?"
     },
     {
-      question: "What happens if I miss my RMD deadline?",
-      category: "penalties"
+      question: "Can I reinvest my RMD?"
     },
     {
-      question: "Can I take more than my required minimum distribution?",
-      category: "planning"
+      question: "How do RMDs affect my Social Security benefits?"
     },
     {
-      question: "Do Roth IRAs have RMD requirements?",
-      category: "planning"
+      question: "What's the difference between RMDs for traditional and Roth IRAs?"
     },
     {
-      question: "How are RMDs taxed?",
-      category: "taxes"
+      question: "Can I use my RMD for charitable giving?"
     },
     {
-      question: "What is the deadline for taking my first RMD?",
-      category: "timing"
-    },
-    {
-      question: "Can I use my RMD for charitable giving?",
-      category: "planning"
-    },
-    {
-      question: "How do I calculate RMDs for multiple accounts?",
-      category: "calculation"
+      question: "How do I calculate my RMD if I have multiple retirement accounts?"
     }
   ]
 };
