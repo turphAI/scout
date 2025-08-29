@@ -7,11 +7,17 @@ import { AccountSidebar, mockAccountGroups, Account } from '@/components/core/Ac
 import PortfolioTabs from '@/components/core/PortfolioTabs';
 import ScoutGhostButton from '@/components/core/ScoutGhostButton';
 import PortfolioPositionsTable from '@/components/core/PortfolioPositionsTable';
+import EnhancedSmartSuggestPanelV2 from '@/components/core/EnhancedSmartSuggestPanelV2';
 import { enhancedPortfolioPositionsData } from '@/data/portfolioPositionsData';
 
 export default function PortfolioPositionsPage() {
   const router = useRouter();
   const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
+  
+  // Enhanced panel state
+  const [isOverlayOpen, setIsOverlayOpen] = useState(false);
+  const [isSidecarOpen, setIsSidecarOpen] = useState(false);
+  const [panelMode, setPanelMode] = useState<'overlay' | 'sidecar'>('overlay');
 
   const handleNavSelect = (navKey: string) => {
     console.log('Navigation selected:', navKey);
@@ -31,6 +37,31 @@ export default function PortfolioPositionsPage() {
   const handleAccountSelect = (account: Account) => {
     setSelectedAccount(account);
     console.log('Selected account:', account);
+  };
+
+  // Enhanced panel handlers
+  const handleScoutAssistantClick = () => {
+    console.log('Scout Assistant clicked - opening enhanced panel');
+    setIsOverlayOpen(true);
+    setPanelMode('overlay');
+  };
+
+  const handlePanelClose = () => {
+    console.log('Panel close called');
+    setIsOverlayOpen(false);
+    setIsSidecarOpen(false);
+    setPanelMode('overlay');
+  };
+
+  const handlePanelModeChange = (mode: 'overlay' | 'sidecar') => {
+    setPanelMode(mode);
+    if (mode === 'sidecar') {
+      setIsOverlayOpen(false);
+      setIsSidecarOpen(true);
+    } else {
+      setIsOverlayOpen(true);
+      setIsSidecarOpen(false);
+    }
   };
 
   return (
@@ -57,7 +88,7 @@ export default function PortfolioPositionsPage() {
             <h1 className="text-3xl font-bold text-gray-900">
               Portfolio Positions
             </h1>
-            <ScoutGhostButton onClick={() => console.log('Scout button clicked')}>
+            <ScoutGhostButton onClick={handleScoutAssistantClick}>
               Scout Assistant
             </ScoutGhostButton>
           </div>
@@ -77,6 +108,20 @@ export default function PortfolioPositionsPage() {
           </div>
         </div>
       </div>
+
+      {/* Enhanced Panel - rendered for both overlay and sidecar modes */}
+      {(isOverlayOpen || isSidecarOpen) && (
+        <div className={isSidecarOpen ? "w-96 h-screen border-l border-gray-200 bg-white" : ""}>
+          <EnhancedSmartSuggestPanelV2
+            isOpen={isOverlayOpen || isSidecarOpen}
+            onClose={handlePanelClose}
+            mode={isSidecarOpen ? "sidecar" : "overlay"}
+            onModeChange={handlePanelModeChange}
+            context="portfolio-positions"
+            title="Scout Assistant"
+          />
+        </div>
+      )}
     </div>
   );
 }

@@ -59,15 +59,28 @@ export function AccountSidebar({
       "w-80 bg-white border-r border-gray-200 p-4 overflow-y-auto",
       className
     )}>
-      <div className="space-y-6">
+      <div className="space-y-8">
         {accountGroups.map((group) => (
           <div key={group.id} className="space-y-3">
+            {/* Group Header with Label and Totals */}
+            {group.label && (
+              <div className="border-b border-gray-200 pb-2">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-semibold text-gray-900">
+                    {group.label}
+                  </h3>
+                  <div className="text-sm font-medium text-gray-900">
+                    {formatCurrency(group.totalBalance)}
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Account Items */}
             <div className="space-y-2">
               {group.id === 'total' ? (
                 // Special card for Total group
-                <Card className="p-3 bg-gray-100">
+                <Card className="p-2 bg-gray-100">
                   <div className="flex items-center justify-between">
                     <div className="text-sm font-medium text-gray-700">
                       All accounts
@@ -83,7 +96,7 @@ export function AccountSidebar({
                   <Card
                     key={account.id}
                     className={cn(
-                      "p-3 cursor-pointer transition-all hover:shadow-md",
+                      "p-2 cursor-pointer transition-all hover:shadow-md",
                       selectedAccountId === account.id 
                         ? "ring-2 ring-blue-500 bg-blue-50" 
                         : "hover:bg-gray-50"

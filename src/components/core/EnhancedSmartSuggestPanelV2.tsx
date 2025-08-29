@@ -33,6 +33,8 @@ interface EnhancedSmartSuggestPanelV2Props {
   isRightPanel?: boolean;
   onTogglePanel?: () => void;
   onModeChange?: (mode: 'overlay' | 'sidecar') => void;
+  context?: 'portfolio-summary' | 'portfolio-positions' | 'default';
+  title?: string;
 }
 
 export default function EnhancedSmartSuggestPanelV2({
@@ -41,9 +43,10 @@ export default function EnhancedSmartSuggestPanelV2({
   onSmartSuggestOpen,
   mode,
   isRightPanel: externalIsRightPanel,
-  onModeChange
+  onModeChange,
+  context = 'default',
+  title = 'Scout'
 }: EnhancedSmartSuggestPanelV2Props) {
-  console.log('EnhancedSmartSuggestPanelV2 rendered with mode:', mode);
   // Use external state if provided, otherwise use internal state
   const isRightPanel = externalIsRightPanel !== undefined ? externalIsRightPanel : false;
   
@@ -232,9 +235,9 @@ export default function EnhancedSmartSuggestPanelV2({
       
       <div 
         ref={panelRef}
-        className={`${
-          mode === 'overlay' 
-            ? `fixed z-50 mx-1 bg-white rounded-2xl transition-all duration-300 ${
+                            className={`${
+                      mode === 'overlay'
+                        ? `fixed z-50 mx-5 bg-white rounded-2xl transition-all duration-300 ${
                 isRightPanel 
                   ? 'top-0 right-0 bottom-0 w-96' 
                   : 'top-12 left-0 right-0 max-h-[calc(100vh-6rem)]'
@@ -262,7 +265,7 @@ export default function EnhancedSmartSuggestPanelV2({
             >
               <Sparkles className="h-3 w-3 text-white" />
             </div>
-            <span className="text-lg font-semibold text-gray-900">Scout</span>
+            <span className="text-lg font-semibold text-gray-900">{title}</span>
           </div>
           
           {/* Menubar */}
@@ -393,59 +396,155 @@ export default function EnhancedSmartSuggestPanelV2({
             </div>
           ) : (
             <div className={`${mode === 'sidecar' ? 'space-y-8' : 'grid grid-cols-1 lg:grid-cols-3 gap-8'} animate-in slide-in-from-bottom-4 duration-300`}>
-              {/* Recent quotes section */}
-              <div className="animate-in slide-in-from-left-4 duration-300 delay-100">
-                <h3 className="font-semibold text-sm mb-3">Recent quotes</h3>
-                <div className="space-y-2">
-                  {quantumQuotes.slice(0, 3).map((quote, index) => (
-                    <div key={index} className="animate-in slide-in-from-left-4 duration-300" style={{ animationDelay: `${(index + 1) * 100}ms` }}>
-                      <Quote
-                        ticker={quote.ticker}
-                        companyName={quote.companyName}
-                        percentageChange={quote.percentageChange}
-                        sharePrice={quote.sharePrice}
-                      />
+              {/* Context-aware content based on current page */}
+              {context === 'portfolio-summary' && (
+                <>
+                  {/* Portfolio Summary specific content */}
+                  <div className="animate-in slide-in-from-left-4 duration-300 delay-100">
+                    <h3 className="font-semibold text-sm mb-3">Portfolio Overview</h3>
+                    <div className="space-y-2">
+                      <div className="p-3 bg-green-50 rounded-lg">
+                        <p className="text-sm text-green-800 font-medium">Portfolio up 2.3% today</p>
+                        <p className="text-xs text-green-600">Strong performance across tech holdings</p>
+                      </div>
+                      <div className="p-3 bg-blue-50 rounded-lg">
+                        <p className="text-sm text-blue-800 font-medium">Account rebalancing due</p>
+                        <p className="text-xs text-blue-600">Consider reviewing allocation</p>
+                      </div>
                     </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Past discussions section */}
-              <div className="animate-in slide-in-from-left-4 duration-300 delay-200">
-                <h3 className="font-semibold text-sm mb-3">Past discussions</h3>
-                <div className="space-y-2">
-                  <ConversationalButtonWithIcon>How do I fund my new account?</ConversationalButtonWithIcon>
-                  <ConversationalButtonWithIcon>What are the risks of margin trading?</ConversationalButtonWithIcon>
-                  <ConversationalButtonWithIcon>Compare ETFs vs mutual funds</ConversationalButtonWithIcon>
-                  <ConversationalButtonWithIcon>Can I trade options in my IRA?</ConversationalButtonWithIcon>
-                  <ConversationalButtonWithIcon>Where can I find tax documents?</ConversationalButtonWithIcon>
-                </div>
-              </div>
-
-              {/* Your day section */}
-              <div className="animate-in slide-in-from-left-4 duration-300 delay-300">
-                <h3 className="font-semibold text-sm mb-3">Your day</h3>
-                
-                {/* Short content slot */}
-                <div className="mb-3 p-3 bg-gray-50 rounded-lg">
-                  <p className="text-sm text-gray-700">
-                    It appears to be a mixed day for the markets, with several factors influencing different sectors.
-                  </p>
-                </div>
-                
-                {/* Tighter alerts */}
-                <div className="space-y-1">
-                  <div className="flex items-center justify-between py-2 px-3 bg-blue-50 rounded-lg">
-                    <span className="text-sm font-medium text-blue-900">Assistant tips</span>
-                    <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full">2</span>
                   </div>
-                  
-                  <div className="flex items-center justify-between py-2 px-3 bg-orange-50 rounded-lg">
-                    <span className="text-sm font-medium text-orange-900">Portfolio insights</span>
-                    <span className="bg-orange-500 text-white text-xs px-2 py-1 rounded-full">5</span>
+
+                  <div className="animate-in slide-in-from-left-4 duration-300 delay-200">
+                    <h3 className="font-semibold text-sm mb-3">Portfolio Insights</h3>
+                    <div className="space-y-2">
+                      <ConversationalButtonWithIcon>How is my portfolio performing vs the market?</ConversationalButtonWithIcon>
+                      <ConversationalButtonWithIcon>What's driving today's gains?</ConversationalButtonWithIcon>
+                      <ConversationalButtonWithIcon>Should I rebalance my portfolio?</ConversationalButtonWithIcon>
+                      <ConversationalButtonWithIcon>What are my top performing holdings?</ConversationalButtonWithIcon>
+                      <ConversationalButtonWithIcon>How can I improve my diversification?</ConversationalButtonWithIcon>
+                    </div>
                   </div>
-                </div>
-              </div>
+
+                  <div className="animate-in slide-in-from-left-4 duration-300 delay-300">
+                    <h3 className="font-semibold text-sm mb-3">Market Summary</h3>
+                    <div className="mb-3 p-3 bg-gray-50 rounded-lg">
+                      <p className="text-sm text-gray-700">
+                        Markets showing resilience with tech sector leading gains. Your portfolio is outperforming the S&P 500 by 1.2%.
+                      </p>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="flex items-center justify-between py-2 px-3 bg-blue-50 rounded-lg">
+                        <span className="text-sm font-medium text-blue-900">Portfolio alerts</span>
+                        <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full">3</span>
+                      </div>
+                      <div className="flex items-center justify-between py-2 px-3 bg-green-50 rounded-lg">
+                        <span className="text-sm font-medium text-green-900">Performance insights</span>
+                        <span className="bg-green-500 text-white text-xs px-2 py-1 rounded-full">2</span>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {context === 'portfolio-positions' && (
+                <>
+                  {/* Portfolio Positions specific content */}
+                  <div className="animate-in slide-in-from-left-4 duration-300 delay-100">
+                    <h3 className="font-semibold text-sm mb-3">Position Analysis</h3>
+                    <div className="space-y-2">
+                      <div className="p-3 bg-orange-50 rounded-lg">
+                        <p className="text-sm text-orange-800 font-medium">BAC showing strong momentum</p>
+                        <p className="text-xs text-orange-600">Up 3.2% today, consider profit taking</p>
+                      </div>
+                      <div className="p-3 bg-red-50 rounded-lg">
+                        <p className="text-sm text-red-800 font-medium">QQQ approaching resistance</p>
+                        <p className="text-xs text-red-600">Watch for potential pullback</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="animate-in slide-in-from-left-4 duration-300 delay-200">
+                    <h3 className="font-semibold text-sm mb-3">Position Insights</h3>
+                    <div className="space-y-2">
+                      <ConversationalButtonWithIcon>Which positions should I consider selling?</ConversationalButtonWithIcon>
+                      <ConversationalButtonWithIcon>What's the outlook for my tech holdings?</ConversationalButtonWithIcon>
+                      <ConversationalButtonWithIcon>Should I add to my QQQ position?</ConversationalButtonWithIcon>
+                      <ConversationalButtonWithIcon>How are my individual stocks performing?</ConversationalButtonWithIcon>
+                      <ConversationalButtonWithIcon>What's my cost basis vs current prices?</ConversationalButtonWithIcon>
+                    </div>
+                  </div>
+
+                  <div className="animate-in slide-in-from-left-4 duration-300 delay-300">
+                    <h3 className="font-semibold text-sm mb-3">Trading Opportunities</h3>
+                    <div className="mb-3 p-3 bg-gray-50 rounded-lg">
+                      <p className="text-sm text-gray-700">
+                        Several positions showing technical strength. Consider reviewing stop losses and profit targets.
+                      </p>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="flex items-center justify-between py-2 px-3 bg-purple-50 rounded-lg">
+                        <span className="text-sm font-medium text-purple-900">Position alerts</span>
+                        <span className="bg-purple-500 text-white text-xs px-2 py-1 rounded-full">4</span>
+                      </div>
+                      <div className="flex items-center justify-between py-2 px-3 bg-yellow-50 rounded-lg">
+                        <span className="text-sm font-medium text-yellow-900">Trading signals</span>
+                        <span className="bg-yellow-500 text-white text-xs px-2 py-1 rounded-full">2</span>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {context === 'default' && (
+                <>
+                  {/* Default content */}
+                  <div className="animate-in slide-in-from-left-4 duration-300 delay-100">
+                    <h3 className="font-semibold text-sm mb-3">Recent quotes</h3>
+                    <div className="space-y-2">
+                      {quantumQuotes.slice(0, 3).map((quote, index) => (
+                        <div key={index} className="animate-in slide-in-from-left-4 duration-300" style={{ animationDelay: `${(index + 1) * 100}ms` }}>
+                          <Quote
+                            ticker={quote.ticker}
+                            companyName={quote.companyName}
+                            percentageChange={quote.percentageChange}
+                            sharePrice={quote.sharePrice}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="animate-in slide-in-from-left-4 duration-300 delay-200">
+                    <h3 className="font-semibold text-sm mb-3">Past discussions</h3>
+                    <div className="space-y-2">
+                      <ConversationalButtonWithIcon>How do I fund my new account?</ConversationalButtonWithIcon>
+                      <ConversationalButtonWithIcon>What are the risks of margin trading?</ConversationalButtonWithIcon>
+                      <ConversationalButtonWithIcon>Compare ETFs vs mutual funds</ConversationalButtonWithIcon>
+                      <ConversationalButtonWithIcon>Can I trade options in my IRA?</ConversationalButtonWithIcon>
+                      <ConversationalButtonWithIcon>Where can I find tax documents?</ConversationalButtonWithIcon>
+                    </div>
+                  </div>
+
+                  <div className="animate-in slide-in-from-left-4 duration-300 delay-300">
+                    <h3 className="font-semibold text-sm mb-3">Your day</h3>
+                    <div className="mb-3 p-3 bg-gray-50 rounded-lg">
+                      <p className="text-sm text-gray-700">
+                        It appears to be a mixed day for the markets, with several factors influencing different sectors.
+                      </p>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="flex items-center justify-between py-2 px-3 bg-blue-50 rounded-lg">
+                        <span className="text-sm font-medium text-blue-900">Assistant tips</span>
+                        <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full">2</span>
+                      </div>
+                      <div className="flex items-center justify-between py-2 px-3 bg-orange-50 rounded-lg">
+                        <span className="text-sm font-medium text-orange-900">Portfolio insights</span>
+                        <span className="bg-orange-500 text-white text-xs px-2 py-1 rounded-full">5</span>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
           )}
         </div>

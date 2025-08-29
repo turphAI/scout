@@ -120,6 +120,7 @@ export default function Header({
           onClose={handleSmartSuggestClose}
           onSmartSuggestOpen={handleSmartSuggestOpen}
           mode="overlay"
+          title="Scout Discovery"
         />
       )}
     </header>

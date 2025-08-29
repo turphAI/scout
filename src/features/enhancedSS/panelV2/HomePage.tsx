@@ -211,6 +211,7 @@ export default function HomePage() {
             onClose={handleSidecarClose}
             mode={isSidecarOpen ? "sidecar" : "overlay"}
             onModeChange={handlePanelModeChange}
+            title="Scout Discovery"
           />
         </div>
       )}
