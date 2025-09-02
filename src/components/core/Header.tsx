@@ -24,6 +24,7 @@ export type HeaderProps = {
   showOverlayPanel?: boolean;
   isOverlayOpen?: boolean;
   onOverlayClose?: () => void;
+  panelContext?: 'portfolio-summary' | 'portfolio-positions' | 'default';
 };
 
 export default function Header({
@@ -35,6 +36,7 @@ export default function Header({
   showOverlayPanel = true,
   isOverlayOpen,
   onOverlayClose,
+  panelContext = 'default',
 }: HeaderProps) {
   const [isSmartSuggestOpen, setIsSmartSuggestOpen] = useState(false);
 
@@ -121,6 +123,7 @@ export default function Header({
           onSmartSuggestOpen={handleSmartSuggestOpen}
           mode="overlay"
           title="Scout Discovery"
+          context={panelContext}
         />
       )}
     </header>

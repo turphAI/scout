@@ -51,13 +51,20 @@ export default function HeaderInput({
       />
       {!hideBadge && (
         <div className="absolute right-2 top-1/2 -translate-y-1/2">
-          <Badge 
-            className="flex items-center gap-1 text-white border-0"
-            style={{ backgroundColor: '#cf89e1' }}
+          <button
+            type="button"
+            onClick={onSmartSuggestOpen}
+            className="focus:outline-none"
+            aria-label="Open Scout panel"
           >
-            <Sparkles className="h-3 w-3" />
-            Scout
-          </Badge>
+            <Badge 
+              className="flex items-center gap-1 text-white border-0 cursor-pointer"
+              style={{ backgroundColor: '#cf89e1' }}
+            >
+              <Sparkles className="h-3 w-3" />
+              Scout
+            </Badge>
+          </button>
         </div>
       )}
     </div>
