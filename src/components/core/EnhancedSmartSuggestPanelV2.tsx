@@ -24,6 +24,8 @@ import { quantumQuotes } from '@/data/quantumQuotes';
 import { getStockData } from '@/data/stockData';
 import { filterTickerData, TickerData, filterAskData, AskData } from '@/data/responseModeData';
 import { rmdConversationData } from '@/data/rmdData';
+import { findQuestionByText, portfolioQuestions, PortfolioQuestion } from '@/data/portfolioQAData';
+import PortfolioResponse from './PortfolioResponse';
 
 interface EnhancedSmartSuggestPanelV2Props {
   isOpen: boolean;
@@ -73,6 +75,9 @@ export default function EnhancedSmartSuggestPanelV2({
   
   // State for RMD conversation
   const [showRMDResponse, setShowRMDResponse] = useState(false);
+  
+  // State for portfolio Q&A
+  const [selectedPortfolioQuestion, setSelectedPortfolioQuestion] = useState<PortfolioQuestion | null>(null);
   
   // Ref for the panel element
   const panelRef = useRef<HTMLDivElement>(null);
@@ -128,6 +133,23 @@ export default function EnhancedSmartSuggestPanelV2({
           setIsTransitioning(false);
         }, 300);
       } else {
+        // Check if this is a portfolio question (only if context is portfolio-related)
+        if (context === 'portfolio-summary' || context === 'portfolio-positions') {
+          const portfolioQuestion = findQuestionByText(trimmedValue, context);
+          
+          if (portfolioQuestion) {
+            setIsTransitioning(true);
+            setSelectedPortfolioQuestion(portfolioQuestion);
+            setPanelState('conversation');
+            
+            // Smooth transition delay
+            setTimeout(() => {
+              setIsTransitioning(false);
+            }, 300);
+            return;
+          }
+        }
+        
         // Handle other ask searches
         console.log('Ask search submitted:', value);
       }
@@ -174,6 +196,7 @@ export default function EnhancedSmartSuggestPanelV2({
     setInputValue('');
     setSelectedStockData(null);
     setShowRMDResponse(false);
+    setSelectedPortfolioQuestion(null);
     
     setTimeout(() => {
       setIsTransitioning(false);
@@ -193,6 +216,7 @@ export default function EnhancedSmartSuggestPanelV2({
     setSelectedAskData(undefined);
     setSelectedStockData(null);
     setShowRMDResponse(false);
+    setSelectedPortfolioQuestion(null);
     
     setTimeout(() => {
       setIsTransitioning(false);
@@ -340,7 +364,7 @@ export default function EnhancedSmartSuggestPanelV2({
                 </Button>
               </div>
               
-              {/* Stock Response or RMD Response */}
+              {/* Stock Response, RMD Response, or Portfolio Response */}
               <div className="overflow-y-auto max-h-[calc(100vh-300px)]">
                 {selectedStockData && (
                   <StockResponse
@@ -352,6 +376,26 @@ export default function EnhancedSmartSuggestPanelV2({
                 )}
                 {showRMDResponse && (
                   <RMDResponse rmdData={rmdConversationData} />
+                )}
+                {selectedPortfolioQuestion && (
+                  <PortfolioResponse
+                    question={selectedPortfolioQuestion}
+                    onBackToSearch={handleBackToSearch}
+                    onConversationPillClick={(pill) => {
+                      // Find the question that matches the conversation pill
+                      const nextQuestion = portfolioQuestions.find(q => 
+                        q.question.toLowerCase().includes(pill.text.toLowerCase().replace(/\?/g, '')) ||
+                        pill.text.toLowerCase().includes(q.question.toLowerCase().replace(/\?/g, ''))
+                      );
+                      
+                      if (nextQuestion && nextQuestion.context === context) {
+                        setSelectedPortfolioQuestion(nextQuestion);
+                      } else {
+                        // If no exact match, create a generic response
+                        console.log('Conversation pill clicked:', pill.text);
+                      }
+                    }}
+                  />
                 )}
               </div>
             </div>
@@ -417,10 +461,22 @@ export default function EnhancedSmartSuggestPanelV2({
                   <div className="animate-in slide-in-from-left-4 duration-300 delay-200">
                     <h3 className="font-semibold text-sm mb-3">Portfolio Insights</h3>
                     <div className="space-y-2">
-                      <ConversationalButtonWithIcon>How is my portfolio performing vs the market?</ConversationalButtonWithIcon>
+                      <ConversationalButtonWithIcon onClick={() => {
+                        const question = portfolioQuestions.find(q => q.id === 'performance-overview');
+                        if (question) {
+                          setSelectedPortfolioQuestion(question);
+                          setPanelState('conversation');
+                        }
+                      }}>How are my investments performing?</ConversationalButtonWithIcon>
+                      <ConversationalButtonWithIcon onClick={() => {
+                        const question = portfolioQuestions.find(q => q.id === 'risk-assessment');
+                        if (question) {
+                          setSelectedPortfolioQuestion(question);
+                          setPanelState('conversation');
+                        }
+                      }}>Which of my investments has high risk?</ConversationalButtonWithIcon>
                       <ConversationalButtonWithIcon>What&apos;s driving today&apos;s gains?</ConversationalButtonWithIcon>
                       <ConversationalButtonWithIcon>Should I rebalance my portfolio?</ConversationalButtonWithIcon>
-                      <ConversationalButtonWithIcon>What are my top performing holdings?</ConversationalButtonWithIcon>
                       <ConversationalButtonWithIcon>How can I improve my diversification?</ConversationalButtonWithIcon>
                     </div>
                   </div>
@@ -466,11 +522,23 @@ export default function EnhancedSmartSuggestPanelV2({
                   <div className="animate-in slide-in-from-left-4 duration-300 delay-200">
                     <h3 className="font-semibold text-sm mb-3">Position Insights</h3>
                     <div className="space-y-2">
+                      <ConversationalButtonWithIcon onClick={() => {
+                        const question = portfolioQuestions.find(q => q.id === 'dividend-stocks');
+                        if (question) {
+                          setSelectedPortfolioQuestion(question);
+                          setPanelState('conversation');
+                        }
+                      }}>Which of my stocks pay dividends?</ConversationalButtonWithIcon>
+                      <ConversationalButtonWithIcon onClick={() => {
+                        const question = portfolioQuestions.find(q => q.id === 'ai-stocks');
+                        if (question) {
+                          setSelectedPortfolioQuestion(question);
+                          setPanelState('conversation');
+                        }
+                      }}>Do I have any AI stocks?</ConversationalButtonWithIcon>
                       <ConversationalButtonWithIcon>Which positions should I consider selling?</ConversationalButtonWithIcon>
                       <ConversationalButtonWithIcon>What&apos;s the outlook for my tech holdings?</ConversationalButtonWithIcon>
-                      <ConversationalButtonWithIcon>Should I add to my QQQ position?</ConversationalButtonWithIcon>
                       <ConversationalButtonWithIcon>How are my individual stocks performing?</ConversationalButtonWithIcon>
-                      <ConversationalButtonWithIcon>What&apos;s my cost basis vs current prices?</ConversationalButtonWithIcon>
                     </div>
                   </div>
 
