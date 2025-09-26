@@ -164,6 +164,25 @@ export default function EnhancedSmartSuggestPanelV2({
     setInputValue(value);
     setCurrentQuery(value);
     
+    // Auto-detect BAC profit query and trigger response
+    if (responseMode === 'ask' && (context === 'portfolio-summary' || context === 'portfolio-positions')) {
+      const trimmedValue = value.trim().toLowerCase();
+      const portfolioQuestion = findQuestionByText(trimmedValue, context);
+      
+      if (portfolioQuestion && portfolioQuestion.id === 'bac-profit') {
+        // Auto-trigger BAC profit response
+        setIsTransitioning(true);
+        setSelectedPortfolioQuestion(portfolioQuestion);
+        setPanelState('conversation');
+        
+        // Smooth transition delay
+        setTimeout(() => {
+          setIsTransitioning(false);
+        }, 300);
+        return;
+      }
+    }
+    
     if (panelState === 'suggest') {
       if (responseMode === 'ticker') {
         if (value.trim() === '') {

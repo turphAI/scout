@@ -111,7 +111,7 @@ export default function RMDResponse({ rmdData }: RMDResponseProps) {
         <div className="space-y-3">
           {rmdData.relatedQuestions.map((question, index) => (
             <div key={index}>
-              <ConversationalButtonWithIcon>
+              <ConversationalButtonWithIcon allowWrapping={true}>
                 {question.question}
               </ConversationalButtonWithIcon>
             </div>

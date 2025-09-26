@@ -6,6 +6,9 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, TrendingUp, TrendingDown, Minus, ExternalLink, FileText, BarChart3, Settings } from 'lucide-react';
 import { PortfolioQuestion, ConversationPill } from '@/data/portfolioQAData';
+import SimpleQuote from './SimpleQuote';
+import BACPositionsCard from './BACPositionsCard';
+import AskSuggestions from './AskSuggestions';
 
 interface PortfolioResponseProps {
   question: PortfolioQuestion;
@@ -45,6 +48,55 @@ export default function PortfolioResponse({ question, onBackToSearch, onConversa
       onConversationPillClick(pill);
     }
   };
+
+  // Special handling for BAC profit question - show 3-column layout
+  if (question.id === 'bac-profit') {
+    return (
+      <div className="space-y-6 animate-in fade-in-0 slide-in-from-bottom-2 duration-300">
+        {/* 3-Column Layout for BAC Profit */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Left Column - Simple Quote */}
+          <div className="lg:col-span-1">
+            <SimpleQuote 
+              ticker={{
+                symbol: "BAC",
+                companyName: "Bank of America Corporation",
+                exchange: "NYSE",
+                price: 42.89,
+                change: 0.11,
+                changePercent: 0.26,
+                news: [],
+                events: []
+              }}
+            />
+          </div>
+
+          {/* Middle Column - BAC Positions */}
+          <div className="lg:col-span-1">
+            <BACPositionsCard />
+          </div>
+
+          {/* Right Column - Related Questions */}
+          <div className="lg:col-span-1">
+            <div className="animate-in fade-in duration-300">
+              <h3 className="font-semibold text-sm mb-3">Related questions</h3>
+              <AskSuggestions 
+                suggestions={[
+                  "What's my total return percentage on Bank of America?",
+                  "When did I first buy Bank of America stock?",
+                  "How does my Bank of America performance compare to the S&P 500?",
+                  "What were the dividend payments I received from Bank of America?",
+                  "What other bank stocks do I own and how are they performing?"
+                ]}
+                onSuggestionClick={(suggestion) => console.log('Suggestion clicked:', suggestion)}
+                hideTitle={true}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 animate-in fade-in-0 slide-in-from-bottom-2 duration-300">

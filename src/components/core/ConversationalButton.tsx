@@ -8,21 +8,24 @@ interface ConversationalButtonProps {
   children: React.ReactNode;
   onClick?: () => void;
   className?: string;
+  allowWrapping?: boolean;
 }
 
 export default function ConversationalButtonWithIcon({ 
   children, 
   onClick, 
-  className = "" 
+  className = "",
+  allowWrapping = false
 }: ConversationalButtonProps) {
   return (
     <ConversationalButton
-      variant="conversational"
+      variant={allowWrapping ? "conversationalWrapped" : "conversational"}
+      size={allowWrapping ? "wrapped" : "default"}
       onClick={onClick}
-      className={`px-4 py-2 ${className}`}
+      className={className}
     >
-      <Sparkles className="h-4 w-4 text-[#cf89e1] mr-2" />
-      <span>{children}</span>
+      <Sparkles className="h-4 w-4 text-[#cf89e1] mr-2 flex-shrink-0" />
+      <span className={allowWrapping ? "text-left" : ""}>{children}</span>
     </ConversationalButton>
   );
 }
