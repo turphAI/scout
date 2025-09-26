@@ -287,6 +287,100 @@ export const portfolioQuestions: PortfolioQuestion[] = [
       { text: 'How do AI stocks compare to traditional tech?', context: 'portfolio-positions' },
       { text: 'What are the risks of AI investing?', context: 'portfolio-positions' }
     ]
+  },
+  // BAC-specific question
+  {
+    id: 'bac-positions',
+    context: 'portfolio-positions',
+    question: 'Show me my BAC positions',
+    answer: 'Here are your current positions in Bank of America (BAC):',
+    supportingData: {
+      summary: "Your BAC position is worth $34,312 with a total gain of $6,664 (+24.10%)",
+      details: [
+        "800 shares of Bank of America Corporation",
+        "Current price: $42.89 per share",
+        "Total value: $34,312",
+        "Portfolio allocation: 2.86%",
+        "Dividend yield: 2.24%"
+      ],
+      positions: [
+        { 
+          symbol: 'BAC', 
+          name: 'Bank of America Corp', 
+          value: 34312.00, 
+          allocation: 2.86, 
+          performance: '+24.10% total return', 
+          additionalInfo: '800 shares at $42.89, dividend yield 2.24%' 
+        }
+      ]
+    },
+    searchSuggestions: [
+      {
+        title: 'Banking Sector Analysis',
+        description: 'Understanding banking stocks and financial services',
+        url: '/guides/banking-sector',
+        type: 'page'
+      },
+      {
+        title: 'Dividend Stock Guide',
+        description: 'How to evaluate dividend-paying stocks',
+        url: '/guides/dividend-stocks',
+        type: 'page'
+      }
+    ],
+    conversationPills: [
+      { text: 'Should I add more BAC shares?', context: 'portfolio-positions' },
+      { text: 'How is BAC performing vs other banks?', context: 'portfolio-positions' },
+      { text: 'What\'s BAC\'s dividend outlook?', context: 'portfolio-positions' },
+      { text: 'Should I sell my BAC position?', context: 'portfolio-positions' }
+    ]
+  },
+  // BAC profit question
+  {
+    id: 'bac-profit',
+    context: 'portfolio-positions',
+    question: 'How much money did I make on Bank of America',
+    answer: 'You have made $6,664 in total profit on your Bank of America (BAC) position, representing a 24.10% return on your investment.',
+    supportingData: {
+      summary: "Total profit: $6,664 (+24.10% return) on 800 shares of BAC",
+      details: [
+        "Initial investment: $27,648 (800 shares × $34.56 average cost)",
+        "Current value: $34,312 (800 shares × $42.89 current price)",
+        "Total gain: $6,664",
+        "Return percentage: 24.10%",
+        "Daily gain today: $88 (+0.26%)"
+      ],
+      positions: [
+        { 
+          symbol: 'BAC', 
+          name: 'Bank of America Corp', 
+          value: 34312.00, 
+          allocation: 2.86, 
+          performance: '+$6,664 total profit (+24.10%)', 
+          additionalInfo: '800 shares, cost basis $34.56/share, current $42.89/share' 
+        }
+      ]
+    },
+    searchSuggestions: [
+      {
+        title: 'Realized vs Unrealized Gains',
+        description: 'Understanding different types of investment gains',
+        url: '/guides/realized-gains',
+        type: 'page'
+      },
+      {
+        title: 'Tax Implications of Stock Gains',
+        description: 'How stock profits affect your taxes',
+        url: '/guides/stock-taxes',
+        type: 'page'
+      }
+    ],
+    conversationPills: [
+      { text: 'Should I sell my BAC shares to lock in profits?', context: 'portfolio-positions' },
+      { text: 'What are the tax implications of selling BAC?', context: 'portfolio-positions' },
+      { text: 'How does BAC compare to other bank stocks?', context: 'portfolio-positions' },
+      { text: 'Should I take some profits and keep some shares?', context: 'portfolio-positions' }
+    ]
   }
 ];
 

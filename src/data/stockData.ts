@@ -500,6 +500,97 @@ export const citigroupRelatedStocks: RelatedStock[] = [
 
 export const citigroupCompanyDescription = `Citigroup Inc. is an American multinational investment bank and financial services corporation headquartered in New York City. The company was formed by the merger of banking giant Citicorp and financial conglomerate Travelers Group in 1998. Citigroup is one of the Big Four banking institutions in the United States, alongside JPMorgan Chase, Bank of America, and Wells Fargo. The company operates in more than 160 countries and jurisdictions and serves approximately 200 million customer accounts.`;
 
+// Bank of America Corporation
+export const bankOfAmericaStockData: StockData = {
+  ticker: "BAC",
+  companyName: "Bank of America Corporation",
+  currentPrice: "42.89",
+  dailyChange: "0.11",
+  dailyChangePercent: "0.26%",
+  afterHoursPrice: "42.91",
+  afterHoursChange: "0.047% (+0.020)",
+  previousClose: "42.78",
+  open: "42.65",
+  high: "43.12",
+  low: "42.45",
+  marketCap: "342.1B",
+  volume: "28.45M",
+  avgVolume: "45.23M",
+  peRatio: "12.45",
+  dividend: "$0.96",
+  dividendYield: "2.24%",
+  exDividendDate: "Aug 30, 2025",
+  eps: "$3.45",
+  beta: "1.23",
+  sharesOutstanding: "7.98B",
+  employees: "213K",
+  ceo: "Brian Moynihan",
+  founded: "Oct 17, 1998",
+  headquarters: "Charlotte, North Carolina, United States",
+  sector: "Banks - Diversified",
+  website: "bankofamerica.com"
+};
+
+export const bankOfAmericaNewsItems: NewsItem[] = [
+  {
+    source: "Reuters",
+    timeAgo: "1 hour ago",
+    headline: "Bank of America reports strong Q3 earnings, beats expectations"
+  },
+  {
+    source: "Bloomberg",
+    timeAgo: "2 hours ago",
+    headline: "Bank of America's consumer banking division shows robust growth"
+  },
+  {
+    source: "CNBC",
+    timeAgo: "3 hours ago",
+    headline: "Bank of America announces new digital banking initiatives"
+  },
+  {
+    source: "Financial Times",
+    timeAgo: "4 hours ago",
+    headline: "Bank of America's wealth management assets reach record high"
+  }
+];
+
+export const bankOfAmericaRelatedStocks: RelatedStock[] = [
+  {
+    ticker: "JPM",
+    companyName: "JPMorgan Chase & Co",
+    price: "198.45",
+    change: "1.23",
+    changePercent: "0.62%",
+    isPositive: true
+  },
+  {
+    ticker: "WFC",
+    companyName: "Wells Fargo & Company",
+    price: "58.92",
+    change: "-0.45",
+    changePercent: "-0.76%",
+    isPositive: false
+  },
+  {
+    ticker: "C",
+    companyName: "Citigroup Inc",
+    price: "67.89",
+    change: "-1.23",
+    changePercent: "-1.78%",
+    isPositive: false
+  },
+  {
+    ticker: "GS",
+    companyName: "Goldman Sachs Group Inc",
+    price: "445.67",
+    change: "2.34",
+    changePercent: "0.53%",
+    isPositive: true
+  }
+];
+
+export const bankOfAmericaCompanyDescription = `Bank of America Corporation is one of the world's leading financial institutions, serving individual consumers, small and middle-market businesses, and large corporations with a full range of banking, investing, asset management, and other financial and risk management products and services. The company serves approximately 66 million consumer and small business relationships with approximately 3,900 retail financial centers, approximately 15,000 ATMs, and award-winning digital banking with approximately 57 million verified digital users. Bank of America is a global leader in wealth management, corporate and investment banking, and trading across a broad range of asset classes serving corporations, governments, institutions, and individuals around the world.`;
+
 // Helper function to get stock data by ticker or company name
 export const getStockData = (query: string): {
   stockData: StockData;
@@ -552,6 +643,15 @@ export const getStockData = (query: string): {
       newsItems: citigroupNewsItems,
       relatedStocks: citigroupRelatedStocks,
       companyDescription: citigroupCompanyDescription
+    };
+  }
+  
+  if (lowercaseQuery === 'bac' || lowercaseQuery === 'bank of america' || lowercaseQuery === 'bank of america corporation') {
+    return {
+      stockData: bankOfAmericaStockData,
+      newsItems: bankOfAmericaNewsItems,
+      relatedStocks: bankOfAmericaRelatedStocks,
+      companyDescription: bankOfAmericaCompanyDescription
     };
   }
   

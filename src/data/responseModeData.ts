@@ -88,6 +88,38 @@ export const mockTickerData: TickerData[] = [
     ]
   },
   {
+    symbol: "BAC",
+    companyName: "Bank of America Corporation",
+    exchange: "NYSE",
+    price: 42.89,
+    change: 0.11,
+    changePercent: 0.26,
+    news: [
+      {
+        headline: "Bank of America reports strong Q3 earnings, beats expectations",
+        source: "Reuters",
+        timeAgo: "1 hour ago"
+      },
+      {
+        headline: "Bank of America's consumer banking division shows robust growth",
+        source: "Bloomberg",
+        timeAgo: "2 hours ago"
+      },
+      {
+        headline: "Bank of America announces new digital banking initiatives",
+        source: "CNBC",
+        timeAgo: "3 hours ago"
+      }
+    ],
+    events: [
+      {
+        type: "Ex-dividend",
+        description: "BAC quarterly dividend payment",
+        date: "Aug 30, 2025"
+      }
+    ]
+  },
+  {
     symbol: "C",
     companyName: "Citigroup Inc",
     exchange: "NYSE",
