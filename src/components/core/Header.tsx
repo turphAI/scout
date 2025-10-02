@@ -25,6 +25,7 @@ export type HeaderProps = {
   isOverlayOpen?: boolean;
   onOverlayClose?: () => void;
   panelContext?: 'portfolio-summary' | 'portfolio-positions' | 'default';
+  onHeaderSubmit?: (value: string) => void;
 };
 
 export default function Header({
@@ -37,6 +38,7 @@ export default function Header({
   isOverlayOpen,
   onOverlayClose,
   panelContext = 'default',
+  onHeaderSubmit,
 }: HeaderProps) {
   const [isSmartSuggestOpen, setIsSmartSuggestOpen] = useState(false);
 
@@ -110,7 +112,7 @@ export default function Header({
           </div>
           
           <div className="flex items-center gap-2">
-            <HeaderInput onSmartSuggestOpen={handleSmartSuggestOpen} />
+            <HeaderInput onSmartSuggestOpen={handleSmartSuggestOpen} onSubmit={onHeaderSubmit} />
           </div>
         </div>
       )}

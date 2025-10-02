@@ -22,26 +22,23 @@ export interface RMDConversationData {
 export const rmdConversationData: RMDConversationData = {
   shortAnswer: "Required Minimum Distribution (RMD) is the minimum amount you must withdraw from your traditional IRA or 401(k) each year starting at age 73 (or 72 if you turned 72 before 2023). The amount is calculated based on your account balance and life expectancy.",
   
-  detailedAnswer: `Required Minimum Distributions (RMDs) are mandatory withdrawals from tax-deferred retirement accounts that must begin by April 1st of the year following the year you turn 73 (or 72 if you turned 72 before 2023).
+  detailedAnswer: `Required Minimum Distributions (RMDs) are mandatory withdrawals from tax‑deferred retirement accounts that generally begin by April 1 of the year after you turn 73 (or 72 if you turned 72 before 2023).
 
-Key Points:
-• RMDs apply to traditional IRAs, 401(k)s, 403(b)s, and other qualified retirement plans
-• The first RMD can be delayed until April 1st of the year after you turn 73
-• Subsequent RMDs must be taken by December 31st each year
-• The distribution amount is calculated using IRS life expectancy tables
-• RMDs are subject to ordinary income tax rates
-• Failure to take RMDs results in a 50% penalty on the shortfall
+Key points (condensed):
+• Applies to traditional IRAs and most employer plans (401(k), 403(b))
+• First RMD may be delayed to April 1 of the following year; after that, due Dec 31 annually
+• Amount uses IRS life‑expectancy tables; missed amounts can trigger significant penalties
 
-Calculation Method:
-Your RMD is calculated by dividing your account balance as of December 31st of the previous year by your life expectancy factor from the IRS Uniform Lifetime Table. For example, if you're 75 with a $100,000 IRA balance, your RMD would be approximately $4,065.
+How it’s calculated:
+Prior‑year Dec 31 balance ÷ IRS life‑expectancy factor (Uniform Lifetime Table for most owners). Example: a $100,000 balance with a factor near 24 yields an RMD of about $4,100.
 
-Tax Implications:
-RMDs are treated as ordinary income and must be reported on your tax return. They can affect your tax bracket, Social Security benefits taxation, and Medicare premiums. Strategic planning can help minimize the tax impact.
+Taxes and planning:
+RMDs are ordinary income and can influence brackets, Social Security taxation, and Medicare IRMAA. Coordinating withdrawals and withholdings can help reduce the impact.
 
-Exceptions:
-• Roth IRAs don't require RMDs during the owner's lifetime
-• Inherited IRAs have different RMD rules
-• Qualified charitable distributions (QCDs) can satisfy RMD requirements while avoiding taxes`,
+Common exceptions:
+• No RMDs for Roth IRAs during the owner’s lifetime
+• Inherited accounts follow different schedules
+• Qualified charitable distributions (QCDs) can satisfy RMDs tax‑efficiently`,
 
   resources: [
     {

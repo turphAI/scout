@@ -12,6 +12,64 @@ interface RMDResponseProps {
 }
 
 export default function RMDResponse({ rmdData }: RMDResponseProps) {
+  type SearchResult = {
+    title: string;
+    snippet: string;
+    source: string;
+    url?: string;
+  };
+
+  const topResults: SearchResult[] = [
+    {
+      title: 'Required minimum distribution (RMD) – Overview',
+      snippet: 'Starting when you\'re age 73, an RMD is the minimum amount you must withdraw from tax‑deferred retirement accounts each year.',
+      source: 'Knowledge Base',
+    },
+    {
+      title: 'RMD deadlines and first‑year options',
+      snippet: 'If it\'s your first RMD, you may delay until April 1 of the following year; subsequent RMDs are due by December 31 each year.',
+      source: 'Help Center',
+    },
+    {
+      title: 'RMD calculation method',
+      snippet: 'Divide your prior year\'s December 31 balance by the IRS life expectancy factor to determine this year\'s RMD.',
+      source: 'Investor Education',
+    },
+    {
+      title: 'RMD tax considerations',
+      snippet: 'RMDs are taxed as ordinary income and can affect Social Security taxation and Medicare IRMAA brackets.',
+      source: 'Tax Planning',
+    },
+    {
+      title: 'Exceptions and special cases',
+      snippet: 'Roth IRAs do not require RMDs during the owner\'s lifetime; inherited accounts follow different rules.',
+      source: 'Guides',
+    },
+  ];
+
+  const moreResults: SearchResult[] = Array.from({ length: 20 }).map((_, i) => ({
+    title: `RMD topic ${i + 1}: guidance and examples`,
+    snippet: 'Short summary explaining the topic with links to calculators, forms, and planning steps.',
+    source: 'Search',
+  }));
+
+  const ResultItem = ({ item }: { item: SearchResult }) => (
+    <div className="p-3 rounded-lg border border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition-colors cursor-pointer">
+      <div className="flex items-start gap-2">
+        <FileText className="h-4 w-4 text-gray-500 mt-1" />
+        <div className="flex-1">
+          <div className="flex items-center gap-2">
+            <h4 className="font-medium text-blue-700 hover:underline">
+              {item.title}
+            </h4>
+            <ExternalLink className="h-3 w-3 text-gray-400" />
+          </div>
+          <p className="text-sm text-gray-600 mt-1">{item.snippet}</p>
+          <div className="text-xs text-gray-500 mt-1">{item.source}</div>
+        </div>
+      </div>
+    </div>
+  );
   const getResourceIcon = (type: RMDResource['type']) => {
     switch (type) {
       case 'video':
@@ -69,38 +127,12 @@ export default function RMDResponse({ rmdData }: RMDResponseProps) {
         </div>
       </Card>
 
-      {/* Additional Resources Card */}
+      {/* Top Results (traditional list) */}
       <Card className="p-6">
-        <h3 className="text-lg font-semibold mb-4">Additional Resources</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {rmdData.resources.map((resource, index) => (
-            <div
-              key={index}
-              className="p-4 border border-gray-200 rounded-lg hover:border-gray-300 hover:shadow-sm transition-all duration-200 cursor-pointer group"
-            >
-              <div className="flex items-start gap-3">
-                <div className={`p-2 rounded-lg ${getResourceColor(resource.type)}`}>
-                  {getResourceIcon(resource.type)}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-2">
-                    <h4 className="font-medium text-gray-900 group-hover:text-blue-600 transition-colors">
-                      {resource.title}
-                    </h4>
-                    <ExternalLink className="h-3 w-3 text-gray-400 group-hover:text-blue-500 transition-colors" />
-                  </div>
-                  <p className="text-sm text-gray-600 mb-2 line-clamp-2">
-                    {resource.description}
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-gray-500">{resource.source}</span>
-                    {resource.readTime && (
-                      <span className="text-xs text-gray-500">{resource.readTime}</span>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
+        <h3 className="text-lg font-semibold mb-4">Top results</h3>
+        <div className="space-y-3">
+          {topResults.map((item, idx) => (
+            <ResultItem key={idx} item={item} />
           ))}
         </div>
       </Card>
@@ -115,6 +147,16 @@ export default function RMDResponse({ rmdData }: RMDResponseProps) {
                 {question.question}
               </ConversationalButtonWithIcon>
             </div>
+          ))}
+        </div>
+      </Card>
+
+      {/* More Results below related questions */}
+      <Card className="p-6">
+        <h3 className="text-lg font-semibold mb-4">More results</h3>
+        <div className="space-y-3">
+          {moreResults.map((item, idx) => (
+            <ResultItem key={idx} item={item} />
           ))}
         </div>
       </Card>
